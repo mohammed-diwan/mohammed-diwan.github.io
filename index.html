@@ -1,0 +1,733 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#1F6F68">
+<title>ديوان</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;700&family=Readex+Pro:wght@300;400;500;600&display=swap">
+<style>
+:root{
+  --bg:#EEF1F4; --surface:#FFFFFF; --surface-2:#F4F6F8; --line:#DCE1E7;
+  --fg:#18212B; --muted:#5D6B7A; --accent:#1F6F68; --accent-soft:#DDEEEC; --like:#C2453A; --warn-bg:#FFF6E0; --warn-fg:#7A5600;
+  --display:"Reem Kufi","Readex Pro",Tahoma,sans-serif;
+  --body:"Readex Pro",Tahoma,"Segoe UI",sans-serif;
+  --r:12px; color-scheme:light;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#12171C; --surface:#1B2229; --surface-2:#232C34; --line:#2E3842;
+  --fg:#E7ECF0; --muted:#97A5B2; --accent:#4FB3A8; --accent-soft:#1F3533; --like:#E8695D; --warn-bg:#3A3220; --warn-fg:#F0CF85; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#12171C; --surface:#1B2229; --surface-2:#232C34; --line:#2E3842;
+  --fg:#E7ECF0; --muted:#97A5B2; --accent:#4FB3A8; --accent-soft:#1F3533; --like:#E8695D; --warn-bg:#3A3220; --warn-fg:#F0CF85; color-scheme:dark}
+
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.6;padding-bottom:env(safe-area-inset-bottom,0px)}
+button,input,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0}
+button:disabled{cursor:default}
+a{color:inherit;text-decoration:none}
+img{max-width:100%}
+[hidden]{display:none!important}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:8px}
+svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+/* top bar */
+.top{position:sticky;top:0;z-index:5;background:var(--surface);border-bottom:1px solid var(--line);
+  padding-top:env(safe-area-inset-top,0px);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.top-in{max-width:1240px;margin:0 auto;height:58px;display:flex;align-items:center;gap:14px}
+.logo{font-family:var(--display);font-size:28px;font-weight:700;color:var(--accent)}
+.tabs{display:flex;gap:4px;margin-inline:auto}
+.tab{width:84px;height:46px;display:grid;place-items:center;border-radius:8px;color:var(--muted);position:relative}
+.tab:hover{background:var(--surface-2)}
+.tab[aria-current="page"]{color:var(--accent)}
+.tab[aria-current="page"]::after{content:"";position:absolute;bottom:-6px;inset-inline:8px;height:3px;background:var(--accent);border-radius:3px}
+.icons{display:flex;gap:8px;align-items:center}
+.ibtn{width:40px;height:40px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;position:relative;flex:none}
+.badge{position:absolute;top:-3px;left:-3px;background:var(--like);color:#fff;font-size:11px;min-width:18px;height:18px;border-radius:9px;display:grid;place-items:center;padding:0 4px}
+.bottom{display:none}
+
+/* shell */
+.shell{max-width:1240px;margin:0 auto;display:grid;grid-template-columns:240px minmax(0,640px) 240px;gap:28px;justify-content:space-between;
+  padding-block:20px 40px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.shell.wide{grid-template-columns:240px minmax(0,1fr)}
+.shell.wide .right{display:none}
+.side{position:sticky;top:78px;align-self:start;display:flex;flex-direction:column;gap:2px;min-width:0}
+.navi{display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:10px;font-weight:500;width:100%;text-align:start}
+.navi:hover,.navi[aria-current="page"]{background:var(--surface)}
+.navi .ic{width:36px;height:36px;border-radius:50%;background:var(--accent-soft);color:var(--accent);display:grid;place-items:center;flex:none}
+.navi .ic svg{width:19px;height:19px}
+.side h3{font-size:13px;color:var(--muted);font-weight:500;margin:18px 10px 6px}
+.main{display:flex;flex-direction:column;gap:16px;min-width:0}
+
+.av{border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:600;flex:none;object-fit:cover}
+.s32{width:32px;height:32px;font-size:13px}.s36{width:36px;height:36px;font-size:14px}.s40{width:40px;height:40px;font-size:15px}.s48{width:48px;height:48px;font-size:18px}
+.s128{width:128px;height:128px;font-size:46px;border:4px solid var(--surface)}
+.card{background:var(--surface);border-radius:var(--r);border:1px solid var(--line)}
+.note{background:var(--warn-bg);color:var(--warn-fg);border-radius:10px;padding:10px 14px;font-size:14px}
+.primary{background:var(--accent);color:#fff;padding:8px 22px;border-radius:8px;font-weight:600}
+.primary:disabled{opacity:.45}
+.ghost{background:var(--surface-2);padding:8px 16px;border-radius:8px;font-weight:500}
+.tag{font-size:11px;background:var(--surface-2);color:var(--muted);border-radius:6px;padding:1px 7px;margin-inline-start:6px;font-weight:400}
+.empty{padding:28px 20px;text-align:center;color:var(--muted)}
+.field{display:grid;gap:4px;font-size:13px;color:var(--muted)}
+.field input,.field textarea{border:1px solid var(--line);background:var(--surface-2);border-radius:8px;padding:9px 12px;outline:none;color:var(--fg);font-size:15px;resize:vertical}
+.field input:focus,.field textarea:focus{border-color:var(--accent)}
+
+/* auth */
+.auth{min-height:100vh;min-height:100dvh;display:grid;place-items:center;padding:24px max(16px,env(safe-area-inset-left,0px))}
+.auth-box{width:100%;max-width:400px;display:grid;gap:18px}
+.auth-box .logo{font-size:56px;text-align:center;line-height:1.2}
+.auth-box .tagline{text-align:center;color:var(--muted);margin-top:-12px}
+.auth-card{padding:22px;display:grid;gap:14px}
+.seg{display:grid;grid-template-columns:1fr 1fr;background:var(--surface-2);border-radius:10px;padding:4px}
+.seg button{padding:8px;border-radius:8px;font-weight:500;color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.err{color:var(--like);font-size:14px;min-height:1em}
+.linkbtn{color:var(--accent);font-size:14px;justify-self:start}
+
+/* composer */
+.composer{padding:14px 16px;display:flex;flex-direction:column;gap:12px}
+.comp-row{display:flex;gap:10px;align-items:flex-start}
+.comp-row textarea{flex:1;min-width:0;resize:none;border:0;background:var(--surface-2);border-radius:20px;padding:9px 16px;outline:none;min-height:42px}
+.comp-actions{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:10px;gap:8px;flex-wrap:wrap}
+.chips{display:flex;gap:2px;flex-wrap:wrap}
+.chip{display:flex;gap:6px;align-items:center;padding:6px 10px;border-radius:8px;color:var(--muted);font-size:14px}
+.chip:hover{background:var(--surface-2)}
+.chip[aria-pressed="true"]{background:var(--accent-soft);color:var(--accent)}
+.pend{position:relative;border-radius:10px;overflow:hidden;border:1px solid var(--line)}
+.pend .paudio{width:calc(100% - 60px);margin:12px 16px}
+.pend-x{position:absolute;top:8px;left:8px;width:30px;height:30px;border-radius:50%;background:rgba(0,0,0,.6);color:#fff;display:grid;place-items:center}
+.recbar{display:flex;align-items:center;gap:10px;background:var(--surface-2);border-radius:999px;padding:6px 8px 6px 14px}
+.recbar .dot{width:10px;height:10px;border-radius:50%;background:var(--like);animation:blink 1s infinite}
+.recbar .t{flex:1;font-variant-numeric:tabular-nums}
+@keyframes blink{50%{opacity:.25}}
+.progress{height:4px;background:var(--surface-2);border-radius:2px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--accent);width:0;transition:width .2s}
+
+/* post */
+.posts{display:flex;flex-direction:column;gap:16px}
+.post{padding-top:14px}
+.ph{display:flex;gap:10px;align-items:center;padding:0 16px}
+.ph .who{flex:1;min-width:0}
+.ph .who button{font-weight:600;padding:0;text-align:start}
+.ph small{display:block;color:var(--muted);font-size:12.5px}
+.del{font-size:13px;color:var(--muted);padding:4px 10px;border-radius:8px}
+.del:hover{background:var(--surface-2)}
+.del.arm{color:var(--like);background:var(--surface-2)}
+.pt{padding:10px 16px 12px;white-space:pre-wrap;overflow-wrap:anywhere}
+.pimg{aspect-ratio:16/9;max-width:100%;display:grid;place-items:center;padding:24px;color:#fff;font-family:var(--display);font-size:clamp(18px,4vw,26px);text-align:center;overflow-wrap:anywhere;white-space:pre-wrap}
+.pmedia{display:block;width:100%;max-height:600px;object-fit:contain;background:#0D1114}
+.paudio{display:block;width:calc(100% - 32px);margin:0 16px 10px}
+.stats{display:flex;justify-content:space-between;padding:10px 16px;color:var(--muted);font-size:13.5px}
+.stats .lk{display:flex;align-items:center;gap:6px}
+.hdot{width:18px;height:18px;border-radius:50%;background:var(--like);display:grid;place-items:center}
+.hdot svg{width:11px;height:11px;fill:#fff;stroke:none}
+.acts{display:grid;grid-template-columns:repeat(2,1fr);margin:0 12px;border-top:1px solid var(--line);padding:4px 0}
+.act{display:flex;justify-content:center;align-items:center;gap:8px;padding:8px;border-radius:8px;color:var(--muted);font-weight:500;font-size:14px}
+.act:hover{background:var(--surface-2)}
+.act.on{color:var(--like)}.act.on svg{fill:var(--like);stroke:var(--like)}
+.comments{padding:10px 16px 14px;display:flex;flex-direction:column;gap:10px;border-top:1px solid var(--line)}
+.cm{display:flex;gap:8px;align-items:flex-start}
+.bubble{background:var(--surface-2);border-radius:16px;padding:7px 12px;min-width:0;overflow-wrap:anywhere}
+.bubble b{font-size:13.5px;display:block}
+.cm-in{display:flex;gap:8px;align-items:center}
+.cm-in input{flex:1;min-width:0;border:0;background:var(--surface-2);border-radius:999px;padding:8px 14px;outline:none}
+
+/* people */
+.person{display:flex;align-items:center;gap:10px;padding:7px 10px;border-radius:10px;width:100%;text-align:start}
+.person:hover{background:var(--surface)}
+.people-list .person{background:var(--surface);border:1px solid var(--line);padding:12px 14px}
+.people-list{display:grid;gap:8px}
+.person .t{flex:1;min-width:0}
+.person small{display:block;color:var(--muted);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.searchbox{display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:999px;padding:8px 14px;color:var(--muted)}
+.searchbox input{border:0;background:none;outline:none;flex:1;min-width:0;color:var(--fg)}
+
+/* profile */
+.cover{height:200px}
+.pf-head{margin-top:-64px;padding:0 24px 18px;display:flex;align-items:flex-end;gap:18px;flex-wrap:wrap}
+.pf-head .info{flex:1;min-width:180px;padding-bottom:6px;margin-top:68px}
+.pf-head h1{font-family:var(--display);font-size:30px;margin:0;line-height:1.3;text-wrap:balance;overflow-wrap:anywhere}
+.pf-head .meta{color:var(--muted);font-size:14px}
+.pf-stats{display:flex;gap:24px;padding:14px 24px;border-top:1px solid var(--line);flex-wrap:wrap}
+.pf-stats b{font-size:20px;display:block;font-variant-numeric:tabular-nums}
+.pf-stats span{color:var(--muted);font-size:13px}
+.pf-bio{padding:0 24px 16px;white-space:pre-wrap;overflow-wrap:anywhere}
+.pf-edit{padding:16px 24px;border-top:1px solid var(--line);display:grid;gap:12px}
+.covers{display:flex;gap:8px;flex-wrap:wrap}
+.covers button{width:44px;height:28px;border-radius:6px;border:2px solid transparent}
+.covers button[aria-pressed="true"]{border-color:var(--fg)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.av-edit{position:relative}
+.av-edit button{position:absolute;bottom:4px;left:4px;width:34px;height:34px;border-radius:50%;background:var(--surface);border:1px solid var(--line);display:grid;place-items:center}
+.av-edit button svg{width:18px;height:18px}
+
+/* messages */
+.msgs{display:grid;grid-template-columns:300px minmax(0,1fr);height:calc(100dvh - 58px - 60px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px));min-height:420px;overflow:hidden}
+.convs{border-inline-end:1px solid var(--line);overflow-y:auto;padding:12px 8px;display:flex;flex-direction:column;gap:2px}
+.convs h2{font-family:var(--display);font-size:24px;margin:0 8px 10px;font-weight:500}
+.conv{display:flex;gap:10px;align-items:center;padding:8px;border-radius:10px;text-align:start;width:100%}
+.conv:hover{background:var(--surface-2)}
+.conv[aria-current="true"]{background:var(--accent-soft)}
+.conv .t{min-width:0;flex:1}
+.conv .t small{display:block;color:var(--muted);font-size:12.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.conv .unread{width:10px;height:10px;border-radius:50%;background:var(--accent)}
+.group-av{background:var(--accent)}
+.thread{display:flex;flex-direction:column;min-width:0;min-height:0}
+.th-head{display:flex;align-items:center;gap:10px;padding:10px 16px;border-bottom:1px solid var(--line)}
+.th-head .back{display:none}
+.th-head small{display:block;color:var(--muted);font-size:12.5px}
+.th-body{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:6px}
+.msg{display:flex;gap:8px;align-items:flex-end;max-width:80%}
+.msg .b{background:var(--surface-2);border-radius:18px;padding:7px 14px;overflow-wrap:anywhere;min-width:0}
+.msg .b small{display:block;font-size:11.5px;color:var(--muted)}
+.msg .b time{display:block;font-size:10.5px;color:var(--muted);margin-top:2px}
+.msg.me{align-self:flex-end;flex-direction:row-reverse}
+.msg.me .b{background:var(--accent);color:#fff}
+.msg.me .b small,.msg.me .b time{color:rgba(255,255,255,.75)}
+.cmedia{display:block;width:240px;max-width:100%;border-radius:12px;margin:2px 0}
+.caudio{display:block;width:240px;max-width:100%}
+.th-foot{border-top:1px solid var(--line);padding:10px 12px;display:grid;grid-template-columns:minmax(0,1fr);gap:8px}
+.th-in{display:flex;gap:6px;align-items:center}
+.th-in input{flex:1;min-width:0;border:0;background:var(--surface-2);border-radius:999px;padding:9px 16px;outline:none}
+.th-in .ibtn svg{width:20px;height:20px}
+.mfail{padding:14px 16px;color:var(--muted);font-size:13px;background:var(--surface-2)}
+
+.toast{position:fixed;bottom:calc(76px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--fg);color:var(--bg);padding:10px 18px;border-radius:10px;font-size:14px;z-index:20;max-width:calc(100% - 32px)}
+.pickers{position:fixed;left:0;top:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none}
+.setup{max-width:640px;margin:40px auto;padding:24px;display:grid;gap:12px}
+.setup code{background:var(--surface-2);padding:1px 6px;border-radius:4px;direction:ltr;unicode-bidi:embed}
+
+@media (max-width:1100px){.shell{grid-template-columns:220px minmax(0,1fr)}.right{display:none}}
+@media (max-width:780px){
+  .shell,.shell.wide{grid-template-columns:minmax(0,1fr);padding-block:12px 90px}
+  .left{display:none}.tabs{display:none}
+  .bottom{display:flex;position:fixed;bottom:0;left:0;right:0;z-index:6;background:var(--surface);border-top:1px solid var(--line);
+    padding:4px max(8px,env(safe-area-inset-right,0px)) calc(4px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));justify-content:space-around}
+  .bottom a{flex:1;display:grid;place-items:center;gap:0;padding:6px 0;color:var(--muted);font-size:11px;position:relative}
+  .bottom a[aria-current="page"]{color:var(--accent)}
+  .msgs{grid-template-columns:minmax(0,1fr);height:calc(100dvh - 58px - 90px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
+  .msgs.open .convs{display:none}
+  .msgs:not(.open) .thread{display:none}
+  .th-head .back{display:grid}
+  .cover{height:140px}
+  .s128{width:104px;height:104px;font-size:38px}
+  .pf-head{padding:0 16px 16px}.pf-bio,.pf-stats,.pf-edit{padding-inline:16px}
+}
+@media (prefers-reduced-motion:reduce){.recbar .dot{animation:none}}
+</style>
+</head>
+<body>
+
+<!-- ===================== ضع إعدادات Firebase هنا ===================== -->
+<script>
+window.FIREBASE_CONFIG = {
+  apiKey: "PASTE_API_KEY",
+  authDomain: "PASTE.firebaseapp.com",
+  projectId: "PASTE",
+  storageBucket: "PASTE.firebasestorage.app",
+  messagingSenderId: "PASTE",
+  appId: "PASTE"
+};
+</script>
+<!-- ================================================================== -->
+
+<div id="app"></div>
+<div class="toast" id="toast" role="status" hidden></div>
+<div class="pickers" aria-hidden="true">
+  <input type="file" id="postFile" accept="image/*,video/*" tabindex="-1">
+  <input type="file" id="chatFile" accept="image/*,video/*" tabindex="-1">
+  <input type="file" id="avatarFile" accept="image/*" tabindex="-1">
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getAuth, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { getFirestore, collection, doc, addDoc, setDoc, getDoc, updateDoc, deleteDoc, onSnapshot, query, orderBy, limit, where, serverTimestamp, arrayUnion, arrayRemove, increment } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getStorage, ref as sref, uploadBytesResumable, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
+
+/* ---------- helpers ---------- */
+const $=s=>document.querySelector(s);
+const app=$("#app");
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const ar=n=>Number(n||0).toLocaleString("ar-EG");
+const GR=["linear-gradient(135deg,#1F6F68,#3E5C8A)","linear-gradient(135deg,#B4543A,#D9A21B)","linear-gradient(135deg,#6B4E8A,#A23E66)","linear-gradient(135deg,#2F7D4B,#1F6F68)","linear-gradient(135deg,#46617A,#18212B)","linear-gradient(135deg,#C2453A,#6B4E8A)"];
+const COLORS=["#1F6F68","#B4543A","#3E5C8A","#8A5A2B","#6B4E8A","#2F7D4B","#A23E66","#46617A"];
+const colorOf=id=>{let h=0;for(const c of String(id))h=(h*31+c.charCodeAt(0))>>>0;return COLORS[h%COLORS.length]};
+const ms=t=>t&&t.toMillis?t.toMillis():(typeof t==="number"?t:Date.now());
+function ago(t){const d=(Date.now()-ms(t))/1000;if(d<60)return"الآن";if(d<3600)return"منذ "+ar(Math.floor(d/60))+" د";if(d<86400)return"منذ "+ar(Math.floor(d/3600))+" س";if(d<7*86400)return"منذ "+ar(Math.floor(d/86400))+" يوم";return new Date(ms(t)).toLocaleDateString("ar-SA-u-ca-gregory",{day:"numeric",month:"long"})}
+const hhmm=t=>new Date(ms(t)).toLocaleTimeString("ar-SA-u-ca-gregory",{hour:"numeric",minute:"2-digit"});
+let tt;function toast(m){const t=$("#toast");t.textContent=m;t.hidden=false;clearTimeout(tt);tt=setTimeout(()=>t.hidden=true,2800)}
+const lsGet=(k,d)=>{try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v)}catch(e){return d}};
+const lsSet=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}};
+
+const I={
+  home:'<svg viewBox="0 0 24 24"><path d="M3 11 12 4l9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>',
+  chat:'<svg viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4z"/></svg>',
+  user:'<svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>',
+  users:'<svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><circle cx="17" cy="9" r="2.5"/><path d="M16 14.2a5 5 0 0 1 5.5 5.8"/></svg>',
+  like:'<svg viewBox="0 0 24 24"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"/></svg>',
+  img:'<svg viewBox="0 0 24 24" style="color:#3BA55C"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 9"/></svg>',
+  mic:'<svg viewBox="0 0 24 24" style="color:#C2453A"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
+  palette:'<svg viewBox="0 0 24 24" style="color:#D9A21B"><circle cx="12" cy="12" r="9"/><circle cx="8" cy="10" r="1.2"/><circle cx="12" cy="7.5" r="1.2"/><circle cx="16" cy="10" r="1.2"/></svg>',
+  send:'<svg viewBox="0 0 24 24" style="transform:scaleX(-1)"><path d="M4 12 20 4l-6 16-3-7z"/></svg>',
+  back:'<svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg>',
+  moon:'<svg viewBox="0 0 24 24"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>',
+  out:'<svg viewBox="0 0 24 24"><path d="M15 4h4a1 1 0 0 1 1 1v14a1 1 0 0 1-1 1h-4M10 8l-4 4 4 4M6 12h10"/></svg>',
+  cam:'<svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>',
+  stop:'<svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg>',
+  x:'<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+  search:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>'
+};
+
+/* ---------- config check ---------- */
+const cfg=window.FIREBASE_CONFIG||{};
+if(!cfg.apiKey||cfg.apiKey.includes("PASTE")){
+  app.innerHTML=`<div class="card setup"><div class="logo">ديوان</div>
+    <h2 style="margin:0;font-family:var(--display);font-weight:500">بقيت خطوة واحدة</h2>
+    <p style="margin:0">افتح ملف <code>index.html</code> وضع إعدادات مشروع Firebase مكان كلمة <code>PASTE</code> في أعلى الملف، ثم ارفعه من جديد. الخطوات بالتفصيل في ملف <code>دليل-التشغيل.md</code>.</p></div>`;
+  throw new Error("Firebase config missing");
+}
+const fb=initializeApp(cfg);
+const auth=getAuth(fb), db=getFirestore(fb), storage=getStorage(fb);
+
+/* ---------- state ---------- */
+const S={
+  me:null, users:{}, posts:[], chats:{}, msgs:[], comments:{},
+  view:"feed", profileOf:null, conv:"public", msgsOpen:false,
+  openC:new Set(), pending:null, chatPending:null, rec:null, bgOn:false, busy:false, editPf:false,
+  peopleQ:"", seen:lsGet("diwan-seen",{}),
+};
+const unsubs=[]; let msgUnsub=null; const cUnsubs={};
+
+/* ---------- people ---------- */
+function U(id){const u=S.users[id];return{name:(u&&u.name)||"عضو في ديوان",photo:u&&u.photo&&u.photo.url,color:colorOf(id),city:u&&u.city,bio:u&&u.bio,cover:u&&u.cover}}
+function av(id,s){const u=U(id);return u.photo?`<img class="av s${s}" src="${esc(u.photo)}" alt="">`:`<span class="av s${s}" style="background:${u.color}">${esc((u.name.trim()[0])||"؟")}</span>`}
+
+/* ---------- media ---------- */
+function mediaHtml(m,ctx){
+  const src=m.url||m.local;
+  const fail=`onerror="this.replaceWith(Object.assign(document.createElement('div'),{className:'mfail',textContent:'تعذّر عرض الملف المرفق'}))"`;
+  if(m.kind==="image")return `<img class="${ctx==="post"?"pmedia":"cmedia"}" src="${esc(src)}" alt="صورة مرفقة" loading="lazy" ${fail}>`;
+  if(m.kind==="video")return `<video class="${ctx==="post"?"pmedia":"cmedia"}" src="${esc(src)}" controls playsinline preload="metadata" ${fail}></video>`;
+  return `<audio class="${ctx==="post"?"paudio":"caudio"}" src="${esc(src)}" controls preload="metadata"></audio>`;
+}
+const MAX=25*1024*1024;
+function userErr(m){const e=new Error(m);e.user=true;return e}
+async function shrink(file){
+  let img;
+  try{img=await createImageBitmap(file)}catch(e){img=await new Promise((res,rej)=>{const i=new Image();i.onload=()=>res(i);i.onerror=rej;i.src=URL.createObjectURL(file)}).catch(()=>null)}
+  if(!img)throw userErr("تعذّر قراءة هذه الصورة. جرّب صورة بصيغة JPG أو PNG.");
+  const k=Math.min(1,2048/Math.max(img.width,img.height));
+  const c=document.createElement("canvas");c.width=Math.round(img.width*k);c.height=Math.round(img.height*k);
+  c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+  return await new Promise(r=>c.toBlob(r,"image/jpeg",.85));
+}
+async function prepare(file){
+  const t=(file.type||"").toLowerCase(),n=(file.name||"").toLowerCase();
+  let kind,blob=file;
+  if(t.startsWith("image/")||/\.(jpe?g|png|gif|webp|heic)$/.test(n)){kind="image";if(!(t==="image/gif"&&file.size<8e6)&&(file.size>2e6||!["image/jpeg","image/png","image/webp","image/gif"].includes(t)))blob=await shrink(file)}
+  else if(t.startsWith("video/")||/\.(mov|mp4|m4v|webm)$/.test(n))kind="video";
+  else if(t.startsWith("audio/"))kind="audio";
+  else throw userErr("نوع الملف غير مدعوم. اختر صورة أو فيديو.");
+  if(blob.size>MAX)throw userErr("الملف أكبر من ٢٥ ميغابايت. اختر ملفًا أصغر أو قصّر الفيديو.");
+  return{blob,kind,type:blob.type||(kind==="video"?"video/mp4":kind==="image"?"image/jpeg":"audio/webm")};
+}
+function upload(p,onProgress){
+  const ext={"image/jpeg":"jpg","image/png":"png","image/gif":"gif","image/webp":"webp","video/mp4":"mp4","video/quicktime":"mov","video/webm":"webm","audio/webm":"webm","audio/mp4":"m4a","audio/ogg":"ogg","audio/mpeg":"mp3"}[p.type.split(";")[0]]||"bin";
+  const path=`media/${S.me.uid}/${Date.now()}_${Math.random().toString(36).slice(2,8)}.${ext}`;
+  const task=uploadBytesResumable(sref(storage,path),p.blob,{contentType:p.type.split(";")[0]});
+  return new Promise((res,rej)=>task.on("state_changed",s=>onProgress&&onProgress(s.bytesTransferred/s.totalBytes),rej,async()=>res({url:await getDownloadURL(task.snapshot.ref),path,kind:p.kind})));
+}
+function failMsg(err){
+  if(err&&err.user)return toast(err.message);
+  const c=(err&&err.code)||"";
+  if(c.includes("unauthorized")||c.includes("permission"))return toast("لا تملك صلاحية تنفيذ هذا. تأكد من قواعد Firebase.");
+  if(c.includes("quota"))return toast("امتلأت مساحة التخزين في مشروع Firebase.");
+  if(c.includes("unavailable")||c.includes("network"))return toast("لا يوجد اتصال بالإنترنت. أعد المحاولة.");
+  console.error(err);toast("حدث خطأ غير متوقع. أعد المحاولة.");
+}
+
+/* ---------- voice recording ---------- */
+async function startRec(target){
+  if(S.rec)return;
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia||!window.MediaRecorder)return toast("متصفحك لا يدعم التسجيل الصوتي. حدّثه أو جرّب Chrome.");
+  let stream;
+  try{stream=await navigator.mediaDevices.getUserMedia({audio:true})}
+  catch(e){return toast("اسمح لديوان باستخدام الميكروفون من إعدادات المتصفح ثم أعد المحاولة.")}
+  const mt=["audio/webm;codecs=opus","audio/webm","audio/mp4","audio/aac"].find(t=>MediaRecorder.isTypeSupported&&MediaRecorder.isTypeSupported(t));
+  const rec=new MediaRecorder(stream,mt?{mimeType:mt}:undefined);const chunks=[];
+  rec.ondataavailable=e=>e.data&&e.data.size&&chunks.push(e.data);
+  rec.onstop=()=>{
+    stream.getTracks().forEach(t=>t.stop());
+    const r=S.rec;S.rec=null;clearInterval(r.timer);
+    if(r.cancel||!chunks.length){paint();return}
+    const type=(rec.mimeType||mt||"audio/webm").split(";")[0];
+    const blob=new Blob(chunks,{type});
+    const p={blob,kind:"audio",type};
+    if(r.target==="post"){clearPending();S.pending={...p,url:URL.createObjectURL(blob)};paint()}
+    else sendChatMedia(p);
+  };
+  rec.start(250);
+  S.rec={target,rec,start:Date.now(),cancel:false,timer:setInterval(()=>{
+    const s=Math.floor((Date.now()-S.rec.start)/1000);const el=$("#recTime");if(el)el.textContent=`${Math.floor(s/60)}:${String(s%60).padStart(2,"0")}`;
+    if(s>=300)stopRec(false);
+  },500)};
+  paint();
+}
+function stopRec(cancel){if(!S.rec)return;S.rec.cancel=cancel;try{S.rec.rec.stop()}catch(e){}}
+function recBar(){return `<div class="recbar"><span class="dot"></span><span class="t">جارٍ التسجيل <span id="recTime">0:00</span></span>
+  <button type="button" class="ghost" data-act="recCancel">إلغاء</button><button type="button" class="primary" data-act="recStop">إيقاف</button></div>`}
+function clearPending(){if(S.pending){try{URL.revokeObjectURL(S.pending.url)}catch(e){}S.pending=null}}
+
+/* ---------- auth screen ---------- */
+let authMode="login";
+function renderAuth(err){
+  app.innerHTML=`<div class="auth"><div class="auth-box">
+    <div class="logo">ديوان</div><div class="tagline">شبكة الأصدقاء والعائلة</div>
+    <form class="card auth-card" id="authForm" novalidate>
+      <div class="seg"><button type="button" data-mode="login" aria-pressed="${authMode==="login"}">تسجيل الدخول</button><button type="button" data-mode="signup" aria-pressed="${authMode==="signup"}">حساب جديد</button></div>
+      ${authMode==="signup"?`<label class="field" for="aName">اسمك كما يراه الآخرون<input id="aName" autocomplete="name" maxlength="40" required></label>`:""}
+      <label class="field" for="aEmail">البريد الإلكتروني<input id="aEmail" type="email" dir="ltr" autocomplete="email" required></label>
+      <label class="field" for="aPass">كلمة المرور<input id="aPass" type="password" dir="ltr" autocomplete="${authMode==="signup"?"new-password":"current-password"}" minlength="6" required></label>
+      <div class="err" id="aErr">${esc(err||"")}</div>
+      <button class="primary" id="aBtn">${authMode==="signup"?"إنشاء الحساب":"دخول"}</button>
+      ${authMode==="login"?`<button type="button" class="linkbtn" id="aReset">نسيت كلمة المرور؟</button>`:""}
+    </form></div></div>`;
+}
+const AUTH_ERR={"auth/email-already-in-use":"هذا البريد مسجّل من قبل. سجّل الدخول بدلًا من ذلك.","auth/invalid-email":"البريد الإلكتروني غير صحيح.","auth/weak-password":"كلمة المرور قصيرة. استخدم ٦ أحرف على الأقل.","auth/invalid-credential":"البريد أو كلمة المرور غير صحيحين.","auth/wrong-password":"البريد أو كلمة المرور غير صحيحين.","auth/user-not-found":"لا يوجد حساب بهذا البريد. أنشئ حسابًا جديدًا.","auth/too-many-requests":"محاولات كثيرة. انتظر قليلًا ثم أعد المحاولة.","auth/network-request-failed":"لا يوجد اتصال بالإنترنت.","auth/unauthorized-domain":"هذا الرابط غير مضاف في إعدادات Firebase (Authorized domains)."};
+async function submitAuth(){
+  const email=$("#aEmail").value.trim(),pass=$("#aPass").value,name=$("#aName")?.value.trim();
+  const errEl=$("#aErr");
+  if(authMode==="signup"&&!name){errEl.textContent="اكتب اسمك.";return}
+  if(!email||!pass){errEl.textContent="اكتب البريد وكلمة المرور.";return}
+  $("#aBtn").disabled=true;errEl.textContent="";
+  try{
+    if(authMode==="signup"){
+      const cred=await createUserWithEmailAndPassword(auth,email,pass);
+      await setDoc(doc(db,"users",cred.user.uid),{name,city:"",bio:"",cover:Math.floor(Math.random()*GR.length),createdAt:serverTimestamp()});
+    }else await signInWithEmailAndPassword(auth,email,pass);
+  }catch(e){errEl.textContent=AUTH_ERR[e.code]||"تعذّر الدخول. أعد المحاولة.";$("#aBtn").disabled=false}
+}
+
+/* ---------- shell ---------- */
+function shell(){
+  app.innerHTML=`
+  <header class="top"><div class="top-in">
+    <a class="logo" href="#feed">ديوان</a>
+    <nav class="tabs" aria-label="الأقسام">
+      <a class="tab" href="#feed" data-v="feed" title="الرئيسية">${I.home}</a>
+      <a class="tab" href="#messages" data-v="messages" title="الرسائل">${I.chat}<span class="badge" data-unread hidden></span></a>
+      <a class="tab" href="#people" data-v="people" title="الأصدقاء">${I.users}</a>
+      <a class="tab" href="#profile" data-v="profile" title="ملفي الشخصي">${I.user}</a>
+    </nav>
+    <div class="icons">
+      <button class="ibtn" id="theme" title="تبديل المظهر" aria-label="تبديل المظهر">${I.moon}</button>
+      <button class="ibtn" id="logout" title="تسجيل الخروج" aria-label="تسجيل الخروج">${I.out}</button>
+    </div></div></header>
+  <div class="shell" id="shell">
+    <aside class="side left">
+      <a class="navi" href="#profile" data-v="profile" id="meNav"></a>
+      <a class="navi" href="#feed" data-v="feed"><span class="ic">${I.home}</span>آخر المنشورات</a>
+      <a class="navi" href="#messages" data-v="messages"><span class="ic">${I.chat}</span>الرسائل</a>
+      <a class="navi" href="#people" data-v="people"><span class="ic">${I.users}</span>الأصدقاء</a>
+    </aside>
+    <main class="main" id="view"></main>
+    <aside class="side right"><h3 style="margin-top:0">الأعضاء</h3><div id="members"></div></aside>
+  </div>
+  <nav class="bottom" aria-label="التنقل">
+    <a href="#feed" data-v="feed">${I.home}الرئيسية</a>
+    <a href="#messages" data-v="messages">${I.chat}الرسائل<span class="badge" data-unread hidden style="top:2px;left:calc(50% - 22px)"></span></a>
+    <a href="#people" data-v="people">${I.users}الأصدقاء</a>
+    <a href="#profile" data-v="profile">${I.user}ملفي</a>
+  </nav>`;
+}
+
+/* ---------- views ---------- */
+function postCard(p){
+  const likes=p.likes||[],liked=likes.includes(S.me.uid),mine=p.author===S.me.uid,nm=U(p.author).name;
+  const cms=S.comments[p.id];
+  return `<article class="card post" data-id="${esc(p.id)}">
+    <div class="ph"><button data-prof="${esc(p.author)}" aria-label="${esc(nm)}" style="padding:0">${av(p.author,40)}</button>
+      <div class="who"><button data-prof="${esc(p.author)}">${esc(nm)}</button><small>${ago(p.createdAt)}</small></div>
+      ${mine?`<button class="del" data-act="del">حذف</button>`:""}</div>
+    ${p.bg!=null&&p.text?`<div class="pimg" style="background:${GR[p.bg%GR.length]}">${esc(p.text)}</div>`:(p.text?`<div class="pt">${esc(p.text)}</div>`:"")}
+    ${p.media?mediaHtml(p.media,"post"):""}
+    <div class="stats"><span class="lk">${likes.length?`<span class="hdot">${I.like}</span>${ar(likes.length)}`:""}</span><span>${p.commentCount?ar(p.commentCount)+" تعليق":""}</span></div>
+    <div class="acts">
+      <button class="act${liked?" on":""}" data-act="like" aria-pressed="${liked}">${I.like}أعجبني</button>
+      <button class="act" data-act="com">${I.chat}تعليق</button>
+    </div>
+    ${S.openC.has(p.id)?`<div class="comments">
+      ${cms?cms.map(c=>`<div class="cm"><button data-prof="${esc(c.author)}" style="padding:0">${av(c.author,32)}</button><div class="bubble"><b>${esc(U(c.author).name)}</b>${esc(c.text)}</div></div>`).join(""):`<div style="color:var(--muted);font-size:13px">جارٍ تحميل التعليقات…</div>`}
+      <form class="cm-in" data-cf="${esc(p.id)}">${av(S.me.uid,32)}<input id="c-${esc(p.id)}" maxlength="1000" placeholder="اكتب تعليقًا…" aria-label="تعليق" autocomplete="off"></form>
+    </div>`:""}
+  </article>`;
+}
+function composer(){
+  const first=U(S.me.uid).name.split(" ")[0];
+  return `<form class="card composer" id="composer">
+    <div class="comp-row">${av(S.me.uid,40)}<textarea id="newpost" rows="1" maxlength="3000" placeholder="بماذا تفكر يا ${esc(first)}؟" aria-label="منشور جديد"></textarea></div>
+    ${S.pending?`<div class="pend">${mediaHtml({kind:S.pending.kind,local:S.pending.url},"post")}<button type="button" class="pend-x" data-act="pendX" aria-label="إزالة المرفق">${I.x}</button></div>`:""}
+    ${S.rec&&S.rec.target==="post"?recBar():""}
+    ${S.busy?`<div class="progress"><i id="upProg"></i></div>`:""}
+    <div class="comp-actions"><div class="chips">
+      <button type="button" class="chip" data-pick="postFile">${I.img}صورة أو فيديو</button>
+      <button type="button" class="chip" data-act="recPost">${I.mic}تسجيل صوتي</button>
+      <button type="button" class="chip" data-act="bg" aria-pressed="${S.bgOn}">${I.palette}خلفية</button>
+    </div><button class="primary" id="postbtn" ${S.pending&&!S.busy?"":"disabled"}>${S.busy?"جارٍ النشر…":"نشر"}</button></div>
+  </form>`;
+}
+function viewFeed(){
+  return composer()+`<div class="posts">${S.posts.map(postCard).join("")||`<div class="card empty">لا توجد منشورات بعد. اكتب أول منشور وادعُ أصدقاءك للتسجيل.</div>`}</div>`;
+}
+function viewProfile(){
+  const id=S.profileOf||S.me.uid,u=U(id),isMe=id===S.me.uid;
+  const posts=S.posts.filter(p=>p.author===id);
+  const cover=u.cover!=null?u.cover:0;
+  return `<section class="card" style="overflow:hidden">
+    <div class="cover" style="background:${GR[cover%GR.length]}"></div>
+    <div class="pf-head"><div class="av-edit">${av(id,128)}${isMe?`<button data-pick="avatarFile" title="تغيير الصورة" aria-label="تغيير الصورة الشخصية">${I.cam}</button>`:""}</div>
+      <div class="info"><h1>${esc(u.name)}</h1><div class="meta">${u.city?esc(u.city):"عضو في ديوان"}</div></div>
+      <div class="row">${isMe?`<button class="ghost" data-act="editPf">تعديل الملف</button>`:`<button class="primary" data-msg="${esc(id)}">مراسلة</button>`}</div></div>
+    ${u.bio?`<div class="pf-bio">${esc(u.bio)}</div>`:(isMe?`<div class="pf-bio" style="color:var(--muted)">لم تكتب نبذة عنك بعد.</div>`:"")}
+    <div class="pf-stats"><div><b>${ar(posts.length)}</b><span>منشور</span></div><div><b>${ar(posts.reduce((s,p)=>s+(p.likes||[]).length,0))}</b><span>إعجاب</span></div><div><b>${ar(posts.reduce((s,p)=>s+(p.commentCount||0),0))}</b><span>تعليق</span></div></div>
+    ${isMe&&S.editPf?`<form class="pf-edit" id="pfForm">
+      <label class="field" for="pfName">الاسم<input id="pfName" maxlength="40" required value="${esc(u.name)}"></label>
+      <label class="field" for="pfCity">المدينة<input id="pfCity" maxlength="40" value="${esc(u.city||"")}"></label>
+      <label class="field" for="pfBio">نبذة عنك<textarea id="pfBio" rows="3" maxlength="300">${esc(u.bio||"")}</textarea></label>
+      <div><div style="font-size:13px;color:var(--muted);margin-bottom:4px">لون الغلاف</div><div class="covers">${GR.map((g,i)=>`<button type="button" data-cover="${i}" aria-pressed="${i===cover}" style="background:${g}" aria-label="غلاف ${i+1}"></button>`).join("")}</div></div>
+      <div class="row"><button class="primary">حفظ</button><button type="button" class="ghost" data-act="pfCancel">إلغاء</button></div>
+    </form>`:""}
+  </section>
+  <h3 style="margin:4px 4px 0;font-family:var(--display);font-size:20px;font-weight:500">المنشورات</h3>
+  <div class="posts">${posts.map(postCard).join("")||`<div class="card empty">لا توجد منشورات بعد.</div>`}</div>`;
+}
+function viewPeople(){
+  const q=S.peopleQ.trim();
+  const list=Object.keys(S.users).filter(id=>id!==S.me.uid).filter(id=>!q||U(id).name.includes(q)).sort((a,b)=>U(a).name.localeCompare(U(b).name,"ar"));
+  return `<h2 style="margin:0;font-family:var(--display);font-weight:500">الأصدقاء</h2>
+    <label class="searchbox">${I.search}<input id="peopleQ" placeholder="ابحث بالاسم" aria-label="بحث عن صديق" value="${esc(S.peopleQ)}"></label>
+    <div class="people-list">${list.map(id=>`<div class="person"><button data-prof="${esc(id)}" style="padding:0">${av(id,48)}</button><button class="t" data-prof="${esc(id)}" style="text-align:start"><b>${esc(U(id).name)}</b><small>${esc(U(id).city||U(id).bio||"عضو في ديوان")}</small></button><button class="primary" data-msg="${esc(id)}">مراسلة</button></div>`).join("")
+      ||`<div class="card empty">${q?"لا يوجد أحد بهذا الاسم.":"لم ينضم أحد غيرك بعد. أرسل رابط ديوان لأصدقائك ليسجّلوا."}</div>`}</div>`;
+}
+const dmId=other=>[S.me.uid,other].sort().join("_");
+const otherOf=c=>(c.members||[]).find(m=>m!==S.me.uid)||S.me.uid;
+function convItems(){
+  const pub=S.chats.public||{};
+  const items=[{id:"public",name:"الدردشة العامة",sub:pub.lastText?U(pub.lastAuthor).name+": "+pub.lastText:"كل أعضاء ديوان",at:pub.lastAt,group:true}];
+  Object.entries(S.chats).filter(([id])=>id!=="public").forEach(([id,c])=>items.push({id,other:otherOf(c),name:U(otherOf(c)).name,sub:c.lastText?(c.lastAuthor===S.me.uid?"أنت: ":"")+c.lastText:"ابدأ المحادثة",at:c.lastAt}));
+  return items.sort((a,b)=>a.group?-1:b.group?1:ms(b.at)-ms(a.at));
+}
+const isUnread=(id,c)=>c&&c.lastAt&&c.lastAuthor!==S.me.uid&&ms(c.lastAt)>(S.seen[id]||0);
+function viewMessages(){
+  const items=convItems(),c=S.conv,isPub=c==="public",chat=S.chats[c];
+  const other=isPub?null:(chat?otherOf(chat):c.split("_").find(x=>x!==S.me.uid));
+  const head=isPub?`<span class="av s40 group-av">${I.users}</span><div><b>الدردشة العامة</b><small>كل أعضاء ديوان</small></div>`
+    :`<button data-prof="${esc(other)}" style="padding:0">${av(other,40)}</button><div><b>${esc(U(other).name)}</b><small>محادثة خاصة</small></div>`;
+  return `<section class="card msgs${S.msgsOpen?" open":""}">
+    <div class="convs"><h2>الرسائل</h2>${items.map(i=>`<button class="conv" data-conv="${esc(i.id)}" aria-current="${i.id===c}">${i.group?`<span class="av s48 group-av">${I.users}</span>`:av(i.other,48)}<span class="t"><b>${esc(i.name)}</b><small>${esc(i.sub)}</small></span>${isUnread(i.id,S.chats[i.id])&&i.id!==c?'<span class="unread" aria-label="غير مقروءة"></span>':""}</button>`).join("")}
+      <a class="conv" href="#people" style="color:var(--accent)"><span class="av s48" style="background:var(--accent-soft);color:var(--accent)">+</span><span class="t"><b>محادثة جديدة</b><small>اختر صديقًا من القائمة</small></span></a></div>
+    <div class="thread">
+      <div class="th-head"><button class="ibtn back" data-act="backConv" aria-label="رجوع">${I.back}</button>${head}</div>
+      <div class="th-body" id="thBody">${S.msgs.length?S.msgs.map(m=>{const me=m.author===S.me.uid;return `<div class="msg${me?" me":""}">${me?"":av(m.author,32)}<div class="b">${isPub&&!me?`<small>${esc(U(m.author).name)}</small>`:""}${m.media?mediaHtml(m.media,"chat"):""}${m.text?esc(m.text):""}<time>${hhmm(m.createdAt)}</time></div></div>`}).join(""):`<div class="empty">لا توجد رسائل بعد. قل مرحبًا 👋</div>`}</div>
+      <div class="th-foot">
+        ${S.rec&&S.rec.target==="chat"?recBar():""}
+        ${S.chatBusy?`<div class="progress"><i id="chatProg"></i></div>`:""}
+        <form class="th-in" id="msgForm">
+          <button type="button" class="ibtn" data-pick="chatFile" aria-label="إرسال صورة أو فيديو">${I.img}</button>
+          <button type="button" class="ibtn" data-act="recChat" aria-label="تسجيل رسالة صوتية">${I.mic}</button>
+          <input id="msgIn" maxlength="2000" placeholder="اكتب رسالة…" aria-label="رسالة" autocomplete="off">
+          <button class="ibtn" style="background:var(--accent);color:#fff" aria-label="إرسال">${I.send}</button>
+        </form>
+      </div>
+    </div></section>`;
+}
+
+/* ---------- paint ---------- */
+function paint(){
+  if(!S.me||!$("#view"))return;
+  const ae=document.activeElement,focusId=ae&&ae.id,sel=ae&&ae.selectionStart;
+  const keep={};document.querySelectorAll("#newpost,.cm-in input,#msgIn,#pfName,#pfCity,#pfBio,#peopleQ").forEach(i=>keep[i.id]=i.value);
+  const playing=[...document.querySelectorAll("video,audio")].filter(m=>!m.paused).map(m=>({src:m.getAttribute("src"),t:m.currentTime}));
+  const tb=$("#thBody"),atBottom=!tb||tb.scrollHeight-tb.scrollTop-tb.clientHeight<80;
+  const v=S.view;
+  $("#shell").classList.toggle("wide",v==="messages");
+  $("#view").innerHTML=v==="profile"?viewProfile():v==="messages"?viewMessages():v==="people"?viewPeople():viewFeed();
+  document.querySelectorAll("[data-v]").forEach(a=>a.setAttribute("aria-current",a.dataset.v===v&&(v!=="profile"||!S.profileOf||S.profileOf===S.me.uid)?"page":"false"));
+  $("#meNav").innerHTML=av(S.me.uid,36)+esc(U(S.me.uid).name);
+  Object.entries(keep).forEach(([k,val])=>{const el=document.getElementById(k);if(el&&k!=="pfName"&&k!=="pfCity"&&k!=="pfBio"||el&&S.editPf)el.value=val});
+  const np=$("#newpost");if(np){np.style.height="auto";np.style.height=Math.min(np.scrollHeight,300)+"px";const b=$("#postbtn");if(b&&!S.busy)b.disabled=!np.value.trim()&&!S.pending}
+  if(focusId){const el=document.getElementById(focusId);if(el){el.focus({preventScroll:true});try{if(sel!=null)el.setSelectionRange(sel,sel)}catch(e){}}}
+  playing.forEach(p=>{const el=[...document.querySelectorAll("video,audio")].find(m=>m.getAttribute("src")===p.src);if(el){el.currentTime=p.t;el.play().catch(()=>{})}});
+  const nb=$("#thBody");if(nb&&atBottom)nb.scrollTop=nb.scrollHeight;
+  $("#members").innerHTML=Object.keys(S.users).filter(id=>id!==S.me.uid).slice(0,12).map(id=>`<button class="person" data-prof="${esc(id)}">${av(id,32)}${esc(U(id).name)}</button>`).join("")||`<div style="color:var(--muted);font-size:13px;padding:0 10px">ادعُ أصدقاءك للتسجيل في ديوان.</div>`;
+  const unread=Object.entries(S.chats).filter(([id,c])=>isUnread(id,c)&&!(v==="messages"&&id===S.conv)).length;
+  document.querySelectorAll("[data-unread]").forEach(b=>{b.hidden=!unread;b.textContent=ar(unread)});
+}
+
+/* ---------- routing ---------- */
+function route(){
+  const h=location.hash.slice(1);
+  const v=["feed","profile","messages","people"].includes(h)?h:"feed";
+  if(v!=="profile"){S.profileOf=null;S.editPf=false}
+  S.view=v;if(v==="messages")openConv(S.conv,false);
+  paint();window.scrollTo(0,0);
+}
+window.addEventListener("hashchange",()=>{const keep=S.profileOf;route();if(location.hash==="#profile"&&keep){S.profileOf=keep;paint()}});
+function openProfile(id){S.editPf=false;S.profileOf=id===S.me.uid?null:id;if(location.hash==="#profile"){paint();window.scrollTo(0,0)}else location.hash="profile"}
+
+/* ---------- data ---------- */
+function markSeen(id){const c=S.chats[id];S.seen[id]=Math.max(Date.now(),c&&c.lastAt?ms(c.lastAt):0);lsSet("diwan-seen",S.seen)}
+async function openConv(id,show=true){
+  if(id!=="public"&&!S.chats[id]){
+    const other=id.split("_").find(x=>x!==S.me.uid)||S.me.uid;
+    try{await setDoc(doc(db,"chats",id),{members:[S.me.uid,other].sort()},{merge:true})}catch(e){failMsg(e);return}
+  }
+  if(S.conv!==id||!msgUnsub){
+    if(msgUnsub)msgUnsub();S.conv=id;S.msgs=[];
+    msgUnsub=onSnapshot(query(collection(db,"chats",id,"messages"),orderBy("createdAt","desc"),limit(200)),s=>{
+      S.msgs=s.docs.map(d=>({id:d.id,...d.data({serverTimestamps:"estimate"})})).reverse();
+      if(S.view==="messages")markSeen(id);paint();
+    },failMsg);
+  }
+  if(show){S.msgsOpen=true;markSeen(id);if(location.hash!=="#messages")location.hash="messages";else paint()}
+}
+function watchComments(pid){
+  if(cUnsubs[pid])return;
+  cUnsubs[pid]=onSnapshot(query(collection(db,"posts",pid,"comments"),orderBy("createdAt","asc"),limit(300)),s=>{
+    S.comments[pid]=s.docs.map(d=>({id:d.id,...d.data({serverTimestamps:"estimate"})}));paint();
+  },failMsg);
+}
+async function start(user){
+  S.me={uid:user.uid};
+  const meRef=doc(db,"users",user.uid);
+  try{const snap=await getDoc(meRef);if(!snap.exists())await setDoc(meRef,{name:(user.email||"عضو").split("@")[0],city:"",bio:"",cover:0,createdAt:serverTimestamp()})}catch(e){failMsg(e)}
+  shell();route();
+  unsubs.push(onSnapshot(query(collection(db,"users"),limit(500)),s=>{const o={};s.docs.forEach(d=>o[d.id]=d.data());S.users=o;paint()},failMsg));
+  unsubs.push(onSnapshot(query(collection(db,"posts"),orderBy("createdAt","desc"),limit(100)),s=>{S.posts=s.docs.map(d=>({id:d.id,...d.data({serverTimestamps:"estimate"})}));paint()},failMsg));
+  unsubs.push(onSnapshot(query(collection(db,"chats"),where("members","array-contains",user.uid)),s=>{const pub=S.chats.public;const o={};s.docs.forEach(d=>o[d.id]=d.data({serverTimestamps:"estimate"}));if(pub)o.public=pub;S.chats=o;paint()},failMsg));
+  unsubs.push(onSnapshot(doc(db,"chats","public"),s=>{if(s.exists())S.chats.public=s.data({serverTimestamps:"estimate"});paint()},()=>{}));
+  setInterval(()=>{const a=document.activeElement;if(!a||!["INPUT","TEXTAREA"].includes(a.tagName))paint()},60e3);
+}
+function stop(){unsubs.splice(0).forEach(u=>u());if(msgUnsub){msgUnsub();msgUnsub=null}Object.keys(cUnsubs).forEach(k=>{cUnsubs[k]();delete cUnsubs[k]});
+  Object.assign(S,{me:null,users:{},posts:[],chats:{},msgs:[],comments:{},view:"feed",conv:"public",msgsOpen:false})}
+
+/* ---------- actions ---------- */
+async function sendChatMedia(p){
+  S.chatBusy=true;paint();
+  try{
+    const media=await upload(p,f=>{const el=$("#chatProg");if(el)el.style.width=Math.round(f*100)+"%"});
+    await sendMsg("",media);
+  }catch(e){failMsg(e)}
+  S.chatBusy=false;paint();
+}
+async function sendMsg(text,media){
+  const id=S.conv;
+  await addDoc(collection(db,"chats",id,"messages"),{author:S.me.uid,text,media:media||null,createdAt:serverTimestamp()});
+  const last=text||(media?{image:"📷 صورة",video:"🎬 فيديو",audio:"🎤 رسالة صوتية"}[media.kind]:"");
+  const data={lastText:last.slice(0,80),lastAuthor:S.me.uid,lastAt:serverTimestamp()};
+  if(id!=="public")data.members=id.split("_").sort();
+  await setDoc(doc(db,"chats",id),data,{merge:true});
+}
+async function handlePicked(id,file){
+  try{
+    if(id==="avatarFile"){
+      const p=await prepare(file);if(p.kind!=="image")throw userErr("اختر صورة.");
+      toast("جارٍ رفع الصورة…");const old=S.users[S.me.uid]&&S.users[S.me.uid].photo;
+      const m=await upload(p);await updateDoc(doc(db,"users",S.me.uid),{photo:{url:m.url,path:m.path}});
+      if(old&&old.path)deleteObject(sref(storage,old.path)).catch(()=>{});toast("تم تحديث صورتك");return;
+    }
+    const p=await prepare(file);
+    if(id==="postFile"){clearPending();S.pending={...p,url:URL.createObjectURL(p.blob)};paint();$("#newpost")?.focus()}
+    else if(id==="chatFile")await sendChatMedia(p);
+  }catch(e){failMsg(e)}
+}
+document.addEventListener("change",e=>{const el=e.target;if(!el.files||!el.files[0])return;const f=el.files[0];el.value="";handlePicked(el.id,f)});
+document.addEventListener("paste",e=>{
+  const f=e.clipboardData&&[...(e.clipboardData.files||[])][0];if(!f)return;
+  if(e.target.id==="newpost"){e.preventDefault();handlePicked("postFile",f)}
+  else if(e.target.id==="msgIn"){e.preventDefault();handlePicked("chatFile",f)}
+});
+
+document.addEventListener("click",async e=>{
+  const t=e.target;
+  const mode=t.closest("[data-mode]");if(mode){authMode=mode.dataset.mode;renderAuth();return}
+  if(t.closest("#aReset")){const em=$("#aEmail").value.trim();if(!em){$("#aErr").textContent="اكتب بريدك أولًا ثم اضغط «نسيت كلمة المرور».";return}
+    try{await sendPasswordResetEmail(auth,em);$("#aErr").textContent="";toast("أرسلنا رابط تغيير كلمة المرور إلى بريدك.")}catch(err){$("#aErr").textContent=AUTH_ERR[err.code]||"تعذّر الإرسال."}return}
+  if(!S.me)return;
+  if(t.closest("#theme")){const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;r.dataset.theme=dark?"light":"dark";lsSet("diwan-theme",r.dataset.theme);return}
+  if(t.closest("#logout")){stopRec(true);await signOut(auth);return}
+  const pk=t.closest("[data-pick]");if(pk){document.getElementById(pk.dataset.pick).click();return}
+  const prof=t.closest("[data-prof]");if(prof){openProfile(prof.dataset.prof);return}
+  const m=t.closest("[data-msg]");if(m){openConv(dmId(m.dataset.msg));return}
+  const cv=t.closest("[data-conv]");if(cv){openConv(cv.dataset.conv);return}
+  const cb=t.closest("[data-cover]");if(cb){document.querySelectorAll("[data-cover]").forEach(b=>b.setAttribute("aria-pressed",b===cb));return}
+  const a=t.closest("[data-act]");if(!a)return;
+  const act=a.dataset.act;
+  if(act==="backConv"){S.msgsOpen=false;paint();return}
+  if(act==="bg"){S.bgOn=!S.bgOn;a.setAttribute("aria-pressed",S.bgOn);return}
+  if(act==="pendX"){clearPending();paint();return}
+  if(act==="recPost"){startRec("post");return}
+  if(act==="recChat"){startRec("chat");return}
+  if(act==="recStop"){stopRec(false);return}
+  if(act==="recCancel"){stopRec(true);return}
+  if(act==="editPf"){S.editPf=true;paint();$("#pfName")?.focus();return}
+  if(act==="pfCancel"){S.editPf=false;paint();return}
+  const card=a.closest(".post");if(!card)return;
+  const id=card.dataset.id,p=S.posts.find(x=>x.id===id);if(!p)return;
+  if(act==="com"){if(S.openC.has(id))S.openC.delete(id);else{S.openC.add(id);watchComments(id)}paint();document.getElementById("c-"+id)?.focus();return}
+  if(act==="like"){const liked=(p.likes||[]).includes(S.me.uid);try{await updateDoc(doc(db,"posts",id),{likes:liked?arrayRemove(S.me.uid):arrayUnion(S.me.uid)})}catch(err){failMsg(err)}return}
+  if(act==="del"){
+    if(!a.classList.contains("arm")){a.classList.add("arm");a.textContent="تأكيد الحذف";setTimeout(()=>{if(a.isConnected){a.classList.remove("arm");a.textContent="حذف"}},3500);return}
+    try{await deleteDoc(doc(db,"posts",id));if(p.media&&p.media.path)deleteObject(sref(storage,p.media.path)).catch(()=>{});toast("حُذف المنشور")}catch(err){failMsg(err)}
+  }
+});
+document.addEventListener("input",e=>{
+  if(e.target.id==="newpost"){const t=e.target;const b=$("#postbtn");if(b&&!S.busy)b.disabled=!t.value.trim()&&!S.pending;t.style.height="auto";t.style.height=Math.min(t.scrollHeight,300)+"px"}
+  if(e.target.id==="peopleQ"){S.peopleQ=e.target.value;paint()}
+});
+document.addEventListener("submit",async e=>{
+  e.preventDefault();const f=e.target;
+  if(f.id==="authForm"){submitAuth();return}
+  if(f.id==="composer"){
+    const text=$("#newpost").value.trim();if((!text&&!S.pending)||S.busy)return;
+    S.busy=true;paint();
+    try{
+      let media=null;
+      if(S.pending)media=await upload(S.pending,fr=>{const el=$("#upProg");if(el)el.style.width=Math.round(fr*100)+"%"});
+      await addDoc(collection(db,"posts"),{author:S.me.uid,text,bg:S.bgOn&&!media&&text?Math.floor(Math.random()*GR.length):null,media,likes:[],commentCount:0,createdAt:serverTimestamp()});
+      clearPending();S.bgOn=false;const np=$("#newpost");if(np)np.value="";toast("تم النشر");
+    }catch(err){failMsg(err)}
+    S.busy=false;paint();return;
+  }
+  if(f.dataset.cf){
+    const pid=f.dataset.cf,inp=f.querySelector("input"),text=inp.value.trim();if(!text)return;
+    inp.value="";
+    try{await addDoc(collection(db,"posts",pid,"comments"),{author:S.me.uid,text,createdAt:serverTimestamp()});await updateDoc(doc(db,"posts",pid),{commentCount:increment(1)})}
+    catch(err){inp.value=text;failMsg(err)}
+    return;
+  }
+  if(f.id==="msgForm"){
+    const inp=$("#msgIn"),text=inp.value.trim();if(!text)return;inp.value="";
+    try{await sendMsg(text,null)}catch(err){inp.value=text;failMsg(err)}
+    inp.focus();return;
+  }
+  if(f.id==="pfForm"){
+    const name=$("#pfName").value.trim();if(!name)return toast("اكتب اسمك.");
+    const cover=+([...document.querySelectorAll("[data-cover]")].find(b=>b.getAttribute("aria-pressed")==="true")?.dataset.cover||0);
+    try{await setDoc(doc(db,"users",S.me.uid),{name,city:$("#pfCity").value.trim(),bio:$("#pfBio").value.trim(),cover},{merge:true});S.editPf=false;toast("حُفظ ملفك الشخصي");paint()}
+    catch(err){failMsg(err)}
+  }
+});
+
+/* ---------- boot ---------- */
+const th=lsGet("diwan-theme",null);if(th)document.documentElement.dataset.theme=th;
+app.innerHTML=`<div class="auth"><div class="logo" style="font-size:48px">ديوان</div></div>`;
+onAuthStateChanged(auth,u=>{stop();if(u)start(u);else renderAuth()});
+</script>
+</body>
+</html>
