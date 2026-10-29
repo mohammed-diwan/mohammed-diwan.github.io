@@ -18,18 +18,18 @@
   --fg:#18212B; --muted:#5D6B7A; --accent:#1F6F68; --accent-soft:#DDEEEC; --like:#C2453A; --warn-bg:#FFF6E0; --warn-fg:#7A5600;
   --display:"Reem Kufi","Readex Pro",Tahoma,sans-serif;
   --body:"Readex Pro",Tahoma,"Segoe UI",sans-serif;
-  --r:12px; color-scheme:light;
+  --r:14px; --warm-soft:#FBEBDD; --online:#2FB36B; --shadow:0 1px 2px rgba(16,40,38,.05),0 6px 20px rgba(16,40,38,.05); color-scheme:light;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#12171C; --surface:#1B2229; --surface-2:#232C34; --line:#2E3842;
-  --fg:#E7ECF0; --muted:#97A5B2; --accent:#4FB3A8; --accent-soft:#1F3533; --like:#E8695D; --warn-bg:#3A3220; --warn-fg:#F0CF85; color-scheme:dark}}
+  --fg:#E7ECF0; --muted:#97A5B2; --accent:#4FB3A8; --accent-soft:#1F3533; --like:#E8695D; --warn-bg:#3A3220; --warn-fg:#F0CF85; --warm-soft:#2E241C; --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25); color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#12171C; --surface:#1B2229; --surface-2:#232C34; --line:#2E3842;
-  --fg:#E7ECF0; --muted:#97A5B2; --accent:#4FB3A8; --accent-soft:#1F3533; --like:#E8695D; --warn-bg:#3A3220; --warn-fg:#F0CF85; color-scheme:dark}
+  --fg:#E7ECF0; --muted:#97A5B2; --accent:#4FB3A8; --accent-soft:#1F3533; --like:#E8695D; --warn-bg:#3A3220; --warn-fg:#F0CF85; --warm-soft:#2E241C; --shadow:0 1px 2px rgba(0,0,0,.3),0 6px 20px rgba(0,0,0,.25); color-scheme:dark}
 
 *{box-sizing:border-box}
 html,body{margin:0}
-body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.6;padding-bottom:env(safe-area-inset-bottom,0px)}
+body{background:radial-gradient(900px 420px at 110% -5%,var(--accent-soft),transparent 65%),radial-gradient(700px 380px at -10% 105%,var(--warm-soft),transparent 60%),var(--bg);background-attachment:fixed;color:var(--fg);font-family:var(--body);font-size:15px;line-height:1.6;padding-bottom:env(safe-area-inset-bottom,0px)}
 button,input,textarea{font:inherit;color:inherit}
 button{cursor:pointer;background:none;border:0}
 button:disabled{cursor:default}
@@ -70,7 +70,39 @@ svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke
 .av{border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:600;flex:none;object-fit:cover}
 .s32{width:32px;height:32px;font-size:13px}.s36{width:36px;height:36px;font-size:14px}.s40{width:40px;height:40px;font-size:15px}.s48{width:48px;height:48px;font-size:18px}
 .s128{width:128px;height:128px;font-size:46px;border:4px solid var(--surface)}
-.card{background:var(--surface);border-radius:var(--r);border:1px solid var(--line)}
+.card{background:var(--surface);border-radius:var(--r);border:1px solid var(--line);box-shadow:var(--shadow)}
+button,.chip,.act,.ibtn,.primary,.ghost{transition:transform .12s ease,background-color .15s ease,color .15s ease}
+button:active:not(:disabled){transform:scale(.95)}
+/* greeting */
+.hello{padding:18px 18px 16px;display:grid;gap:4px;background:linear-gradient(135deg,var(--accent),#2A8C81 55%,#C98A3E);color:#fff;border:0;position:relative;overflow:hidden}
+.hello::after{content:"";position:absolute;inset:auto -40px -60px auto;width:180px;height:180px;border-radius:50%;background:rgba(255,255,255,.08)}
+.hello h2{margin:0;font-family:var(--display);font-weight:500;font-size:24px;line-height:1.3}
+.hello .d{font-size:13px;opacity:.85}
+.hello .live{display:flex;align-items:center;gap:6px;font-size:13px;margin-top:4px}
+.hello .live i{width:8px;height:8px;border-radius:50%;background:#7CF0AE;box-shadow:0 0 0 0 rgba(124,240,174,.7);animation:ping 1.8s infinite}
+@keyframes ping{70%{box-shadow:0 0 0 8px rgba(124,240,174,0)}100%{box-shadow:0 0 0 0 rgba(124,240,174,0)}}
+/* members strip */
+.strip{display:flex;gap:14px;overflow-x:auto;scrollbar-width:none;padding:2px 2px 4px}
+.strip::-webkit-scrollbar{display:none}
+.mem{flex:none;width:66px;display:grid;justify-items:center;gap:4px;font-size:12px;color:var(--muted);text-align:center}
+.mem .ring{padding:3px;border-radius:50%;background:var(--line);position:relative}
+.mem.on .ring{background:conic-gradient(from 200deg,#2FB36B,#4FB3A8,#D9A21B,#2FB36B)}
+.mem .ring .av{border:2px solid var(--surface)}
+.mem span{max-width:66px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dotwrap{position:relative;display:inline-grid}
+.dotwrap.on::after,.mem.on .ring::after{content:"";position:absolute;bottom:1px;left:1px;width:12px;height:12px;border-radius:50%;background:var(--online);border:2px solid var(--surface)}
+/* motion */
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.enter{animation:rise .45s cubic-bezier(.2,.8,.2,1) both}
+@keyframes pop{0%{transform:scale(1)}35%{transform:scale(1.45)}70%{transform:scale(.9)}100%{transform:scale(1)}}
+.act.pop svg{animation:pop .5s ease}
+.bigheart{position:fixed;left:50%;top:45%;width:96px;height:96px;margin:-48px 0 0 -48px;pointer-events:none;color:#fff;filter:drop-shadow(0 4px 14px rgba(0,0,0,.35));animation:heart .9s ease forwards;z-index:2}
+.bigheart svg{width:100%;height:100%;fill:var(--like);stroke:#fff}
+@keyframes heart{0%{opacity:0;transform:scale(.3)}25%{opacity:1;transform:scale(1.1)}45%{transform:scale(.95)}80%{opacity:1}100%{opacity:0;transform:scale(1.2) translateY(-20px)}}
+.post{position:relative}
+.skel{height:150px;background:linear-gradient(90deg,var(--surface) 25%,var(--surface-2) 50%,var(--surface) 75%);background-size:200% 100%;animation:shimmer 1.2s infinite}
+@keyframes shimmer{to{background-position:-200% 0}}
+.msg.enter{animation-duration:.3s}
 .note{background:var(--warn-bg);color:var(--warn-fg);border-radius:10px;padding:10px 14px;font-size:14px}
 .primary{background:var(--accent);color:#fff;padding:8px 22px;border-radius:8px;font-weight:600}
 .primary:disabled{opacity:.45}
@@ -214,6 +246,8 @@ svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke
     padding:4px max(8px,env(safe-area-inset-right,0px)) calc(4px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px));justify-content:space-around}
   .bottom a{flex:1;display:grid;place-items:center;gap:0;padding:6px 0;color:var(--muted);font-size:11px;position:relative}
   .bottom a[aria-current="page"]{color:var(--accent)}
+  .bottom a svg{padding:3px 14px;border-radius:999px;width:52px;height:30px;box-sizing:border-box;transition:background-color .2s}
+  .bottom a[aria-current="page"] svg{background:var(--accent-soft)}
   .msgs{grid-template-columns:minmax(0,1fr);height:calc(100dvh - 58px - 90px - env(safe-area-inset-top,0px) - env(safe-area-inset-bottom,0px))}
   .msgs.open .convs{display:none}
   .msgs:not(.open) .thread{display:none}
@@ -222,7 +256,7 @@ svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke
   .s128{width:104px;height:104px;font-size:38px}
   .pf-head{padding:0 16px 16px}.pf-bio,.pf-stats,.pf-edit{padding-inline:16px}
 }
-@media (prefers-reduced-motion:reduce){.recbar .dot{animation:none}}
+@media (prefers-reduced-motion:reduce){.recbar .dot,.enter,.act.pop svg,.bigheart,.skel,.hello .live i{animation:none}}
 </style>
 </head>
 <body>
@@ -454,19 +488,54 @@ function shell(){
   </nav>`;
 }
 
+/* ---------- liveliness ---------- */
+const isOnline=id=>{const u=S.users[id];return !!(u&&u.lastSeen&&Date.now()-ms(u.lastSeen)<3*60e3)};
+const seenLabel=id=>{const u=S.users[id];if(isOnline(id))return "متصل الآن";if(u&&u.lastSeen)return "نشط "+ago(u.lastSeen);return ""};
+function avOn(id,s){return `<span class="dotwrap${isOnline(id)?" on":""}">${av(id,s)}</span>`}
+const seenPosts=new Set();let firstPaintPosts=true;
+function greeting(){
+  const h=new Date().getHours();
+  const g=h<5?["مساء الخير","🌙"]:h<12?["صباح الخير","☀️"]:h<17?["نهارك سعيد","🌤️"]:["مساء الخير","🌙"];
+  const first=U(S.me.uid).name.split(" ")[0];
+  let hijri="";try{hijri=new Intl.DateTimeFormat("ar-SA-u-ca-islamic-umalqura",{day:"numeric",month:"long",year:"numeric"}).format(new Date())}catch(e){}
+  const greg=new Date().toLocaleDateString("ar-SA-u-ca-gregory",{weekday:"long",day:"numeric",month:"long"});
+  const online=Object.keys(S.users).filter(id=>id!==S.me.uid&&isOnline(id)).length;
+  const today=S.posts.filter(p=>Date.now()-ms(p.createdAt)<86400e3).length;
+  const live=online?`<i></i>${ar(online)} ${online===1?"صديق متصل":"أصدقاء متصلون"} الآن`:(today?`${ar(today)} منشور اليوم`:"ابدأ يومك بمنشور جميل");
+  return `<section class="card hello"><h2>${g[0]} يا ${esc(first)} ${g[1]}</h2><div class="d">${esc(greg)}${hijri?" · "+esc(hijri):""}</div><div class="live">${online?live:esc(live)}</div></section>`;
+}
+function membersStrip(){
+  const ids=Object.keys(S.users).filter(id=>id!==S.me.uid).sort((a,b)=>(isOnline(b)-isOnline(a))||ms((S.users[b]||{}).lastSeen)-ms((S.users[a]||{}).lastSeen));
+  if(!ids.length)return "";
+  return `<div class="strip" aria-label="الأعضاء">${ids.slice(0,30).map(id=>`<button class="mem${isOnline(id)?" on":""}" data-prof="${esc(id)}"><span class="ring">${av(id,48)}</span><span>${esc(U(id).name.split(" ")[0])}</span></button>`).join("")}</div>`;
+}
+function bigHeart(card){const r=card.getBoundingClientRect();const h=document.createElement("div");h.className="bigheart";h.style.position="fixed";h.style.left=(r.left+r.width/2)+"px";h.style.top=(r.top+Math.min(r.height,window.innerHeight)/2)+"px";h.innerHTML=I.like;document.body.appendChild(h);setTimeout(()=>h.remove(),950)}
+let popId=null;
+function chime(f1,f2){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();const t=actx.currentTime;[f1,f2].forEach((f,i)=>{const o=actx.createOscillator(),g=actx.createGain();o.type="sine";o.frequency.value=f;g.gain.setValueAtTime(.0001,t+i*.08);g.gain.exponentialRampToValueAtTime(.08,t+i*.08+.02);g.gain.exponentialRampToValueAtTime(.0001,t+i*.08+.18);o.connect(g).connect(actx.destination);o.start(t+i*.08);o.stop(t+i*.08+.2)})}catch(e){}}
+async function heartbeat(){if(!S.me||document.visibilityState!=="visible")return;try{await updateDoc(doc(db,"users",S.me.uid),{lastSeen:serverTimestamp()})}catch(e){}}
+document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="visible")heartbeat()});
+document.addEventListener("dblclick",e=>{
+  const zone=e.target.closest(".pt,.pimg,img.pmedia");if(!zone||!S.me)return;
+  const card=zone.closest(".post");if(!card)return;
+  const p=S.posts.find(x=>x.id===card.dataset.id);if(!p)return;
+  bigHeart(card);
+  if(!(p.likes||[]).includes(S.me.uid)){popId=p.id;updateDoc(doc(db,"posts",p.id),{likes:arrayUnion(S.me.uid)}).catch(failMsg)}
+});
+
 /* ---------- views ---------- */
 function postCard(p){
   const likes=p.likes||[],liked=likes.includes(S.me.uid),mine=p.author===S.me.uid,nm=U(p.author).name;
   const cms=S.comments[p.id];
-  return `<article class="card post" data-id="${esc(p.id)}">
-    <div class="ph"><button data-prof="${esc(p.author)}" aria-label="${esc(nm)}" style="padding:0">${av(p.author,40)}</button>
+  const isNew=!seenPosts.has(p.id);const delay=firstPaintPosts?Math.min(S._idx=(S._idx||0)+1,6)*60:0;
+  return `<article class="card post${isNew?" enter":""}" data-id="${esc(p.id)}"${isNew&&delay?` style="animation-delay:${delay}ms"`:""}>
+    <div class="ph"><button data-prof="${esc(p.author)}" aria-label="${esc(nm)}" style="padding:0">${avOn(p.author,40)}</button>
       <div class="who"><button data-prof="${esc(p.author)}">${esc(nm)}</button><small>${ago(p.createdAt)}</small></div>
       ${mine?`<button class="del" data-act="del">حذف</button>`:""}</div>
     ${p.bg!=null&&p.text?`<div class="pimg" style="background:${GR[p.bg%GR.length]}">${esc(p.text)}</div>`:(p.text?`<div class="pt">${esc(p.text)}</div>`:"")}
     ${p.media?mediaHtml(p.media,"post"):""}
     <div class="stats"><span class="lk">${likes.length?`<span class="hdot">${I.like}</span>${ar(likes.length)}`:""}</span><span>${p.commentCount?ar(p.commentCount)+" تعليق":""}</span></div>
     <div class="acts">
-      <button class="act${liked?" on":""}" data-act="like" aria-pressed="${liked}">${I.like}أعجبني</button>
+      <button class="act${liked?" on":""}${popId===p.id?" pop":""}" data-act="like" aria-pressed="${liked}">${I.like}أعجبني</button>
       <button class="act" data-act="com">${I.chat}تعليق</button>
     </div>
     ${S.openC.has(p.id)?`<div class="comments">
@@ -501,7 +570,9 @@ function installPrompt(){
   return `<div class="card" style="padding:14px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap"><img src="icon-192.png" alt="" width="40" height="40" style="border-radius:10px"><span style="flex:1;min-width:180px">ثبّت ديوان كتطبيق على جوالك، ليفتح من أيقونته مباشرة.</span><div class="row"><button class="ghost" data-act="installLater">لاحقًا</button><button class="primary" data-act="install">تثبيت</button></div></div>`;
 }
 function viewFeed(){
-  return installPrompt()+notifyPrompt()+composer()+`<div class="posts">${S.posts.map(postCard).join("")||`<div class="card empty">لا توجد منشورات بعد. اكتب أول منشور وادعُ أصدقاءك للتسجيل.</div>`}</div>`;
+  S._idx=0;
+  const list=!S.postsLoaded?`<div class="card skel"></div><div class="card skel"></div>`:(S.posts.map(postCard).join("")||`<div class="card empty">لا توجد منشورات بعد. اكتب أول منشور وادعُ أصدقاءك للتسجيل.</div>`);
+  return greeting()+membersStrip()+installPrompt()+notifyPrompt()+composer()+`<div class="posts">${list}</div>`;
 }
 function viewProfile(){
   const id=S.profileOf||S.me.uid,u=U(id),isMe=id===S.me.uid;
@@ -530,7 +601,7 @@ function viewPeople(){
   const list=Object.keys(S.users).filter(id=>id!==S.me.uid).filter(id=>!q||U(id).name.includes(q)).sort((a,b)=>U(a).name.localeCompare(U(b).name,"ar"));
   return `<h2 style="margin:0;font-family:var(--display);font-weight:500">الأصدقاء</h2>
     <label class="searchbox">${I.search}<input id="peopleQ" placeholder="ابحث بالاسم" aria-label="بحث عن صديق" value="${esc(S.peopleQ)}"></label>
-    <div class="people-list">${list.map(id=>`<div class="person"><button data-prof="${esc(id)}" style="padding:0">${av(id,48)}</button><button class="t" data-prof="${esc(id)}" style="text-align:start"><b>${esc(U(id).name)}</b><small>${esc(U(id).city||U(id).bio||"عضو في ديوان")}</small></button><button class="primary" data-msg="${esc(id)}">مراسلة</button></div>`).join("")
+    <div class="people-list">${list.map(id=>`<div class="person"><button data-prof="${esc(id)}" style="padding:0">${avOn(id,48)}</button><button class="t" data-prof="${esc(id)}" style="text-align:start"><b>${esc(U(id).name)}</b><small>${esc(seenLabel(id)||U(id).city||U(id).bio||"عضو في ديوان")}</small></button><button class="primary" data-msg="${esc(id)}">مراسلة</button></div>`).join("")
       ||`<div class="card empty">${q?"لا يوجد أحد بهذا الاسم.":"لم ينضم أحد غيرك بعد. أرسل رابط ديوان لأصدقائك ليسجّلوا."}</div>`}</div>`;
 }
 const dmId=other=>[S.me.uid,other].sort().join("_");
@@ -546,13 +617,13 @@ function viewMessages(){
   const items=convItems(),c=S.conv,isPub=c==="public",chat=S.chats[c];
   const other=isPub?null:(chat?otherOf(chat):c.split("_").find(x=>x!==S.me.uid));
   const head=isPub?`<span class="av s40 group-av">${I.users}</span><div><b>الدردشة العامة</b><small>كل أعضاء ديوان</small></div>`
-    :`<button data-prof="${esc(other)}" style="padding:0">${av(other,40)}</button><div><b>${esc(U(other).name)}</b><small>محادثة خاصة</small></div>`;
+    :`<button data-prof="${esc(other)}" style="padding:0">${avOn(other,40)}</button><div><b>${esc(U(other).name)}</b><small${isOnline(other)?' style="color:var(--online)"':""}>${esc(seenLabel(other)||"محادثة خاصة")}</small></div>`;
   return `<section class="card msgs${S.msgsOpen?" open":""}">
     <div class="convs"><h2>الرسائل</h2>${items.map(i=>`<button class="conv" data-conv="${esc(i.id)}" aria-current="${i.id===c}">${i.group?`<span class="av s48 group-av">${I.users}</span>`:av(i.other,48)}<span class="t"><b>${esc(i.name)}</b><small>${esc(i.sub)}</small></span>${isUnread(i.id,S.chats[i.id])&&i.id!==c?'<span class="unread" aria-label="غير مقروءة"></span>':""}</button>`).join("")}
       <a class="conv" href="#people" style="color:var(--accent)"><span class="av s48" style="background:var(--accent-soft);color:var(--accent)">+</span><span class="t"><b>محادثة جديدة</b><small>اختر صديقًا من القائمة</small></span></a></div>
     <div class="thread">
       <div class="th-head"><button class="ibtn back" data-act="backConv" aria-label="رجوع">${I.back}</button>${head}</div>
-      <div class="th-body" id="thBody">${S.msgs.length?S.msgs.map(m=>{const me=m.author===S.me.uid;return `<div class="msg${me?" me":""}">${me?"":av(m.author,32)}<div class="b">${isPub&&!me?`<small>${esc(U(m.author).name)}</small>`:""}${m.media?mediaHtml(m.media,"chat"):""}${m.text?esc(m.text):""}<time>${hhmm(m.createdAt)}</time></div></div>`}).join(""):`<div class="empty">لا توجد رسائل بعد. قل مرحبًا 👋</div>`}</div>
+      <div class="th-body" id="thBody">${S.msgs.length?S.msgs.map((m,i)=>{const me=m.author===S.me.uid;const fresh=i===S.msgs.length-1&&m.id!==S._lastMsg;return `<div class="msg${me?" me":""}${fresh?" enter":""}">${me?"":av(m.author,32)}<div class="b">${isPub&&!me?`<small>${esc(U(m.author).name)}</small>`:""}${m.media?mediaHtml(m.media,"chat"):""}${m.text?esc(m.text):""}<time>${hhmm(m.createdAt)}</time></div></div>`}).join(""):`<div class="empty">لا توجد رسائل بعد. قل مرحبًا 👋</div>`}</div>
       <div class="th-foot">
         ${S.rec&&S.rec.target==="chat"?recBar():""}
         ${S.chatBusy?`<div class="progress"><i id="chatProg"></i></div>`:""}
@@ -583,7 +654,10 @@ function paint(){
   if(focusId){const el=document.getElementById(focusId);if(el){el.focus({preventScroll:true});try{if(sel!=null)el.setSelectionRange(sel,sel)}catch(e){}}}
   playing.forEach(p=>{const el=[...document.querySelectorAll("video,audio")].find(m=>m.getAttribute("src")===p.src);if(el){el.currentTime=p.t;el.play().catch(()=>{})}});
   const nb=$("#thBody");if(nb&&atBottom)nb.scrollTop=nb.scrollHeight;
-  $("#members").innerHTML=Object.keys(S.users).filter(id=>id!==S.me.uid).slice(0,12).map(id=>`<button class="person" data-prof="${esc(id)}">${av(id,32)}${esc(U(id).name)}</button>`).join("")||`<div style="color:var(--muted);font-size:13px;padding:0 10px">ادعُ أصدقاءك للتسجيل في ديوان.</div>`;
+  if(S.postsLoaded){S.posts.forEach(p=>seenPosts.add(p.id));firstPaintPosts=false}
+  if(S.msgs.length)S._lastMsg=S.msgs[S.msgs.length-1].id;
+  if(popId)setTimeout(()=>{popId=null},600);
+  $("#members").innerHTML=Object.keys(S.users).filter(id=>id!==S.me.uid).slice(0,12).map(id=>`<button class="person" data-prof="${esc(id)}">${avOn(id,32)}${esc(U(id).name)}</button>`).join("")||`<div style="color:var(--muted);font-size:13px;padding:0 10px">ادعُ أصدقاءك للتسجيل في ديوان.</div>`;
   const unread=Object.entries(S.chats).filter(([id,c])=>isUnread(id,c)&&!(v==="messages"&&id===S.conv)).length;
   document.querySelectorAll("[data-unread]").forEach(b=>{b.hidden=!unread;b.textContent=ar(unread)});
   document.title=unread?`(${ar(unread)}) ديوان`:"ديوان";
@@ -629,7 +703,8 @@ async function start(user){
   try{const snap=await getDoc(meRef);if(!snap.exists())await setDoc(meRef,{name:(user.email||"عضو").split("@")[0],city:"",bio:"",cover:0,createdAt:serverTimestamp()})}catch(e){failMsg(e)}
   shell();route();
   unsubs.push(onSnapshot(query(collection(db,"users"),limit(500)),s=>{const o={};s.docs.forEach(d=>o[d.id]=d.data());S.users=o;paint()},failMsg));
-  unsubs.push(onSnapshot(query(collection(db,"posts"),orderBy("createdAt","desc"),limit(100)),s=>{S.posts=s.docs.map(d=>({id:d.id,...d.data({serverTimestamps:"estimate"})}));paint()},failMsg));
+  unsubs.push(onSnapshot(query(collection(db,"posts"),orderBy("createdAt","desc"),limit(100)),s=>{S.posts=s.docs.map(d=>({id:d.id,...d.data({serverTimestamps:"estimate"})}));S.postsLoaded=true;paint()},failMsg));
+  heartbeat();setInterval(heartbeat,90e3);
   unsubs.push(onSnapshot(query(collection(db,"chats"),where("members","array-contains",user.uid)),s=>{const pub=S.chats.public;const o={};s.docs.forEach(d=>o[d.id]=d.data({serverTimestamps:"estimate"}));if(pub)o.public=pub;S.chats=o;
     if(!S.chatsInit){s.docs.forEach(d=>noteSeen(d.id,o[d.id]));S.chatsInit=true}else s.docs.forEach(d=>checkNotify(d.id,o[d.id]));
     paint()},failMsg));
@@ -710,7 +785,7 @@ document.addEventListener("click",async e=>{
   const card=a.closest(".post");if(!card)return;
   const id=card.dataset.id,p=S.posts.find(x=>x.id===id);if(!p)return;
   if(act==="com"){if(S.openC.has(id))S.openC.delete(id);else{S.openC.add(id);watchComments(id)}paint();document.getElementById("c-"+id)?.focus();return}
-  if(act==="like"){const liked=(p.likes||[]).includes(S.me.uid);try{await updateDoc(doc(db,"posts",id),{likes:liked?arrayRemove(S.me.uid):arrayUnion(S.me.uid)})}catch(err){failMsg(err)}return}
+  if(act==="like"){const liked=(p.likes||[]).includes(S.me.uid);if(!liked){popId=id;a.classList.add("on","pop")}try{await updateDoc(doc(db,"posts",id),{likes:liked?arrayRemove(S.me.uid):arrayUnion(S.me.uid)})}catch(err){failMsg(err)}return}
   if(act==="del"){
     if(!a.classList.contains("arm")){a.classList.add("arm");a.textContent="تأكيد الحذف";setTimeout(()=>{if(a.isConnected){a.classList.remove("arm");a.textContent="حذف"}},3500);return}
     try{await deleteDoc(doc(db,"posts",id));if(p.media&&p.media.path)deleteObject(sref(storage,p.media.path)).catch(()=>{});toast("حُذف المنشور")}catch(err){failMsg(err)}
@@ -730,7 +805,7 @@ document.addEventListener("submit",async e=>{
       let media=null;
       if(S.pending)media=await upload(S.pending,fr=>{const el=$("#upProg");if(el)el.style.width=Math.round(fr*100)+"%"});
       await addDoc(collection(db,"posts"),{author:S.me.uid,text,bg:S.bgOn&&!media&&text?Math.floor(Math.random()*GR.length):null,media,likes:[],commentCount:0,createdAt:serverTimestamp()});
-      clearPending();S.bgOn=false;const np=$("#newpost");if(np)np.value="";toast("تم النشر");
+      clearPending();S.bgOn=false;const np=$("#newpost");if(np)np.value="";toast("تم النشر ✨");chime(660,990);
     }catch(err){failMsg(err)}
     S.busy=false;paint();return;
   }
@@ -743,7 +818,7 @@ document.addEventListener("submit",async e=>{
   }
   if(f.id==="msgForm"){
     const inp=$("#msgIn"),text=inp.value.trim();if(!text)return;inp.value="";
-    try{await sendMsg(text,null)}catch(err){inp.value=text;failMsg(err)}
+    try{await sendMsg(text,null);chime(880,1320)}catch(err){inp.value=text;failMsg(err)}
     inp.focus();return;
   }
   if(f.id==="pfForm"){
