@@ -160,6 +160,8 @@ button:active:not(:disabled){transform:scale(.95)}
 .paudio{display:block;width:calc(100% - 32px);margin:0 16px 10px}
 .stats{display:flex;justify-content:space-between;padding:10px 16px;color:var(--muted);font-size:13.5px}
 .stats .lk{display:flex;align-items:center;gap:6px}
+.ccount{color:var(--muted);font-size:13.5px;padding:2px 4px;border-radius:6px}
+.ccount:hover{color:var(--fg);text-decoration:underline}
 .hdot{width:18px;height:18px;border-radius:50%;background:var(--like);display:grid;place-items:center}
 .hdot svg{width:11px;height:11px;fill:#fff;stroke:none}
 .acts{display:grid;grid-template-columns:repeat(2,1fr);margin:0 12px;border-top:1px solid var(--line);padding:4px 0}
@@ -533,7 +535,7 @@ function postCard(p){
       ${mine?`<button class="del" data-act="del">حذف</button>`:""}</div>
     ${p.bg!=null&&p.text?`<div class="pimg" style="background:${GR[p.bg%GR.length]}">${esc(p.text)}</div>`:(p.text?`<div class="pt">${esc(p.text)}</div>`:"")}
     ${p.media?mediaHtml(p.media,"post"):""}
-    <div class="stats"><span class="lk">${likes.length?`<span class="hdot">${I.like}</span>${ar(likes.length)}`:""}</span><span>${p.commentCount?ar(p.commentCount)+" تعليق":""}</span></div>
+    <div class="stats"><span class="lk">${likes.length?`<span class="hdot">${I.like}</span>${ar(likes.length)}`:""}</span>${p.commentCount?`<button class="ccount" data-act="com">${p.commentCount===1?"تعليق واحد":p.commentCount===2?"تعليقان":ar(p.commentCount)+(p.commentCount<=10?" تعليقات":" تعليقًا")}</button>`:"<span></span>"}</div>
     <div class="acts">
       <button class="act${liked?" on":""}${popId===p.id?" pop":""}" data-act="like" aria-pressed="${liked}">${I.like}أعجبني</button>
       <button class="act" data-act="com">${I.chat}تعليق</button>
