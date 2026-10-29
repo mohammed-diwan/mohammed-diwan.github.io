@@ -280,6 +280,8 @@ const I={
   cam:'<svg viewBox="0 0 24 24"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>',
   stop:'<svg viewBox="0 0 24 24"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor"/></svg>',
   x:'<svg viewBox="0 0 24 24"><path d="M6 6l12 12M18 6 6 18"/></svg>',
+  bell:'<svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 12 0v5l2 2H4z"/><path d="M10 21h4"/></svg>',
+  bellOff:'<svg viewBox="0 0 24 24"><path d="M6 16V11a6 6 0 0 1 9.5-4.9M18 11v5l2 2H6"/><path d="M10 21h4M3 3l18 18"/></svg>',
   search:'<svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>'
 };
 
@@ -425,6 +427,7 @@ function shell(){
       <a class="tab" href="#profile" data-v="profile" title="ملفي الشخصي">${I.user}</a>
     </nav>
     <div class="icons">
+      <button class="ibtn" id="notifyBtn" hidden></button>
       <button class="ibtn" id="theme" title="تبديل المظهر" aria-label="تبديل المظهر">${I.moon}</button>
       <button class="ibtn" id="logout" title="تسجيل الخروج" aria-label="تسجيل الخروج">${I.out}</button>
     </div></div></header>
@@ -481,8 +484,12 @@ function composer(){
     </div><button class="primary" id="postbtn" ${S.pending&&!S.busy?"":"disabled"}>${S.busy?"جارٍ النشر…":"نشر"}</button></div>
   </form>`;
 }
+function notifyPrompt(){
+  if(!canNotify||Notification.permission!=="default"||lsGet("diwan-notify-later",false))return "";
+  return `<div class="card" style="padding:14px 16px;display:flex;gap:12px;align-items:center;flex-wrap:wrap"><span style="color:var(--accent)">${I.bell}</span><span style="flex:1;min-width:180px">فعّل الإشعارات لتعرف فور وصول رسالة جديدة.</span><div class="row"><button class="ghost" data-act="notifyLater">لاحقًا</button><button class="primary" data-act="notifyOn">تفعيل</button></div></div>`;
+}
 function viewFeed(){
-  return composer()+`<div class="posts">${S.posts.map(postCard).join("")||`<div class="card empty">لا توجد منشورات بعد. اكتب أول منشور وادعُ أصدقاءك للتسجيل.</div>`}</div>`;
+  return notifyPrompt()+composer()+`<div class="posts">${S.posts.map(postCard).join("")||`<div class="card empty">لا توجد منشورات بعد. اكتب أول منشور وادعُ أصدقاءك للتسجيل.</div>`}</div>`;
 }
 function viewProfile(){
   const id=S.profileOf||S.me.uid,u=U(id),isMe=id===S.me.uid;
@@ -567,6 +574,8 @@ function paint(){
   $("#members").innerHTML=Object.keys(S.users).filter(id=>id!==S.me.uid).slice(0,12).map(id=>`<button class="person" data-prof="${esc(id)}">${av(id,32)}${esc(U(id).name)}</button>`).join("")||`<div style="color:var(--muted);font-size:13px;padding:0 10px">ادعُ أصدقاءك للتسجيل في ديوان.</div>`;
   const unread=Object.entries(S.chats).filter(([id,c])=>isUnread(id,c)&&!(v==="messages"&&id===S.conv)).length;
   document.querySelectorAll("[data-unread]").forEach(b=>{b.hidden=!unread;b.textContent=ar(unread)});
+  document.title=unread?`(${ar(unread)}) ديوان`:"ديوان";
+  paintBell();
 }
 
 /* ---------- routing ---------- */
@@ -609,11 +618,15 @@ async function start(user){
   shell();route();
   unsubs.push(onSnapshot(query(collection(db,"users"),limit(500)),s=>{const o={};s.docs.forEach(d=>o[d.id]=d.data());S.users=o;paint()},failMsg));
   unsubs.push(onSnapshot(query(collection(db,"posts"),orderBy("createdAt","desc"),limit(100)),s=>{S.posts=s.docs.map(d=>({id:d.id,...d.data({serverTimestamps:"estimate"})}));paint()},failMsg));
-  unsubs.push(onSnapshot(query(collection(db,"chats"),where("members","array-contains",user.uid)),s=>{const pub=S.chats.public;const o={};s.docs.forEach(d=>o[d.id]=d.data({serverTimestamps:"estimate"}));if(pub)o.public=pub;S.chats=o;paint()},failMsg));
-  unsubs.push(onSnapshot(doc(db,"chats","public"),s=>{if(s.exists())S.chats.public=s.data({serverTimestamps:"estimate"});paint()},()=>{}));
+  unsubs.push(onSnapshot(query(collection(db,"chats"),where("members","array-contains",user.uid)),s=>{const pub=S.chats.public;const o={};s.docs.forEach(d=>o[d.id]=d.data({serverTimestamps:"estimate"}));if(pub)o.public=pub;S.chats=o;
+    if(!S.chatsInit){s.docs.forEach(d=>noteSeen(d.id,o[d.id]));S.chatsInit=true}else s.docs.forEach(d=>checkNotify(d.id,o[d.id]));
+    paint()},failMsg));
+  unsubs.push(onSnapshot(doc(db,"chats","public"),s=>{if(s.exists())S.chats.public=s.data({serverTimestamps:"estimate"});
+    if(!S.pubInit){noteSeen("public",S.chats.public);S.pubInit=true}else checkNotify("public",S.chats.public);
+    paint()},()=>{}));
   setInterval(()=>{const a=document.activeElement;if(!a||!["INPUT","TEXTAREA"].includes(a.tagName))paint()},60e3);
 }
-function stop(){unsubs.splice(0).forEach(u=>u());if(msgUnsub){msgUnsub();msgUnsub=null}Object.keys(cUnsubs).forEach(k=>{cUnsubs[k]();delete cUnsubs[k]});
+function stop(){S.chatsInit=false;S.pubInit=false;for(const k in lastNotified)delete lastNotified[k];unsubs.splice(0).forEach(u=>u());if(msgUnsub){msgUnsub();msgUnsub=null}Object.keys(cUnsubs).forEach(k=>{cUnsubs[k]();delete cUnsubs[k]});
   Object.assign(S,{me:null,users:{},posts:[],chats:{},msgs:[],comments:{},view:"feed",conv:"public",msgsOpen:false})}
 
 /* ---------- actions ---------- */
@@ -659,6 +672,9 @@ document.addEventListener("click",async e=>{
   if(t.closest("#aReset")){const em=$("#aEmail").value.trim();if(!em){$("#aErr").textContent="اكتب بريدك أولًا ثم اضغط «نسيت كلمة المرور».";return}
     try{await sendPasswordResetEmail(auth,em);$("#aErr").textContent="";toast("أرسلنا رابط تغيير كلمة المرور إلى بريدك.")}catch(err){$("#aErr").textContent=AUTH_ERR[err.code]||"تعذّر الإرسال."}return}
   if(!S.me)return;
+  if(t.closest("#notifyBtn")){toggleNotify();return}
+  if(t.closest("[data-act=\"notifyOn\"]")){toggleNotify();return}
+  if(t.closest("[data-act=\"notifyLater\"]")){lsSet("diwan-notify-later",true);paint();return}
   if(t.closest("#theme")){const r=document.documentElement;const dark=r.dataset.theme?r.dataset.theme==="dark":matchMedia("(prefers-color-scheme: dark)").matches;r.dataset.theme=dark?"light":"dark";lsSet("diwan-theme",r.dataset.theme);return}
   if(t.closest("#logout")){stopRec(true);await signOut(auth);return}
   const pk=t.closest("[data-pick]");if(pk){document.getElementById(pk.dataset.pick).click();return}
@@ -723,6 +739,57 @@ document.addEventListener("submit",async e=>{
     catch(err){failMsg(err)}
   }
 });
+
+/* ---------- notifications ---------- */
+const canNotify="Notification" in window&&"serviceWorker" in navigator;
+let swReg=null;
+if("serviceWorker" in navigator){
+  navigator.serviceWorker.register("sw.js").then(r=>swReg=r).catch(()=>{});
+  navigator.serviceWorker.addEventListener("message",e=>{if(e.data&&e.data.type==="openConv"&&S.me&&e.data.conv)openConv(e.data.conv)});
+}
+const notifyOn=()=>canNotify&&Notification.permission==="granted"&&lsGet("diwan-notify",true);
+const lastNotified={};
+let ICON="";
+try{const c=document.createElement("canvas");c.width=c.height=192;const x=c.getContext("2d");x.fillStyle="#1F6F68";x.beginPath();x.arc(96,96,96,0,7);x.fill();x.fillStyle="#fff";x.font="bold 110px Tahoma,sans-serif";x.textAlign="center";x.textBaseline="middle";x.fillText("د",96,104);ICON=c.toDataURL("image/png")}catch(e){}
+function noteSeen(id,c){if(c&&c.lastAt)lastNotified[id]=ms(c.lastAt)}
+function checkNotify(id,c){
+  if(!c||!c.lastAt||!S.me)return;
+  const t=ms(c.lastAt);
+  if(t<=(lastNotified[id]||0))return;
+  lastNotified[id]=t;
+  if(c.lastAuthor===S.me.uid)return;
+  const visible=document.visibilityState==="visible";
+  if(visible&&S.view==="messages"&&S.conv===id)return;
+  const who=U(c.lastAuthor).name,title=id==="public"?`${who} · الدردشة العامة`:who,body=c.lastText||"رسالة جديدة";
+  if(visible){toast(`💬 ${title}: ${body}`);beep()}
+  else if(notifyOn())showNote(title,body,id);
+}
+function showNote(title,body,id){
+  const opts={body,tag:"chat-"+id,renotify:true,icon:ICON||undefined,badge:ICON||undefined,data:{conv:id==="test"?null:id},lang:"ar",dir:"rtl"};
+  const reg=swReg?Promise.resolve(swReg):(navigator.serviceWorker?navigator.serviceWorker.ready:Promise.reject());
+  reg.then(r=>r.showNotification(title,opts)).catch(()=>{try{const n=new Notification(title,opts);n.onclick=()=>{window.focus();if(id!=="test")openConv(id)}}catch(e){}});
+}
+let actx=null;
+function beep(){try{actx=actx||new (window.AudioContext||window.webkitAudioContext)();const o=actx.createOscillator(),g=actx.createGain();o.frequency.value=880;g.gain.setValueAtTime(.0001,actx.currentTime);g.gain.exponentialRampToValueAtTime(.15,actx.currentTime+.02);g.gain.exponentialRampToValueAtTime(.0001,actx.currentTime+.25);o.connect(g).connect(actx.destination);o.start();o.stop(actx.currentTime+.3)}catch(e){}}
+function paintBell(){
+  const b=$("#notifyBtn");if(!b)return;
+  b.hidden=!canNotify;if(!canNotify)return;
+  const on=notifyOn();
+  b.innerHTML=on?I.bell:I.bellOff;
+  b.style.color=on?"var(--accent)":"";
+  const label=on?"إيقاف إشعارات الرسائل":"تفعيل إشعارات الرسائل";
+  b.title=label;b.setAttribute("aria-label",label);
+}
+async function toggleNotify(){
+  if(!canNotify)return toast("متصفحك لا يدعم الإشعارات. جرّب Chrome.");
+  if(Notification.permission==="denied")return toast("الإشعارات محظورة لهذا الموقع. اضغط القفل 🔒 بجانب الرابط، ثم الأذونات، وفعّل الإشعارات.");
+  if(Notification.permission==="default"){
+    const p=await Notification.requestPermission();
+    if(p!=="granted"){toast("لم تُفعَّل الإشعارات.");paint();return}
+    lsSet("diwan-notify",true);showNote("ديوان","تم تفعيل الإشعارات. ستصلك الرسائل الجديدة هنا.","test");
+  }else{const on=!lsGet("diwan-notify",true);lsSet("diwan-notify",on);toast(on?"تم تشغيل إشعارات الرسائل":"تم إيقاف إشعارات الرسائل")}
+  paint();
+}
 
 /* ---------- boot ---------- */
 const th=lsGet("diwan-theme",null);if(th)document.documentElement.dataset.theme=th;
