@@ -15,3 +15,13 @@ self.addEventListener("notificationclick", e => {
     return self.clients.openWindow(conv ? "./#messages" : "./");
   })());
 });
+
+// فتح الموقع دون اتصال: نحفظ آخر نسخة من الصفحة ونعرضها عند انقطاع الإنترنت
+self.addEventListener("fetch", e => {
+  if (e.request.mode !== "navigate") return;
+  e.respondWith(
+    fetch(e.request)
+      .then(r => { const copy = r.clone(); caches.open("diwan-v1").then(c => c.put("./", copy)); return r; })
+      .catch(() => caches.match("./"))
+  );
+});
